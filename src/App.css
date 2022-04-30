@@ -1,0 +1,34 @@
+* {
+    margin: 0;
+    border: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}   
+
+.button{
+    height: 40px;
+    padding: 4px 30px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.button--small {
+    width: 100px;
+}
+
+.button--large {
+    width: 130px;
+}
+
+.solid {
+    background: linear-gradient(359deg, #F64C18 -33.11%, #EE9539 99.14%);
+    color: white;
+}
+
+.border {
+    border: 2px solid #F64C18;
+    background: transparent;
+    color: #F64C18;
+}
