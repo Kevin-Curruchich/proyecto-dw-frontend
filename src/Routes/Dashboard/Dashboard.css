@@ -1,0 +1,57 @@
+.main--dashboard{
+    width: 100%;
+}
+
+.main__balances{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 15px;
+}
+
+.balance {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 320px;
+    padding: 10px 50px;
+    background: linear-gradient(360deg, rgba(128, 28, 106, 0.15) 0%, rgba(157, 107, 221, 0.15) 0.01%, rgba(139, 167, 239, 0.15) 100%);
+    border-radius: 1rem;
+}
+
+.balance__title{
+    font-size: 18px;
+}
+
+.balance__mount{
+    font-size: 40px;
+}
+
+.balance__user{
+    font-size: 15px;
+}
+
+.accounts {
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+}
+
+.accounts__card{
+    padding: 10px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(360deg, rgba(128, 28, 106, 0.15) 0%, rgba(157, 107, 221, 0.15) 0.01%, rgba(139, 167, 239, 0.15) 100%);
+    border-radius: 0.5rem;
+}
+
+.accounts__card--mount{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.accounts__card--banc{
+    font-size: 12px;
+}

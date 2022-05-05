@@ -1,0 +1,22 @@
+.main--index {
+    width: 100%;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 125px;
+    background-image: url("../../Assets/moneyverse.svg");
+    background-size: 300px;
+    background-repeat: no-repeat;
+    background-position-x: 50%;
+    background-position-y: calc(100% - 240px) ;
+}
+
+#slogan {
+    font-size: 70px;
+    background: linear-gradient(360deg, #801C6A 0%, #9D6BDD 0.01%, #8BA7EF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

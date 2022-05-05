@@ -1,30 +1,43 @@
 import Header from "../../Components/Header/Header";
 import FormLayout from "../../Components/Form/FormLayout";
 import * as Yup from "yup";
-import "./Login.css";
+import "./Signup.css";
 
-const loginSchema = Yup.object().shape({
+const signupSchema = Yup.object().shape({
+  name: Yup.string().required("Insert your Name"),
   email: Yup.string().email().required("Insert email"),
   password: Yup.string().required("Insert Password"),
+  confirmPassword: Yup.string().required("Confirm Password"),
 });
 
-export default function Login() {
+export default function Signup() {
   return (
     <>
       <Header />
       <main className="main--onboard">
         <FormLayout
-          title="Welcome Back"
-          initialValues={{ email: "", password: "" }}
-          validation={loginSchema}
+          title="Sign Up"
+          initialValues={{
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          }}
+          validation={signupSchema}
           inputs={[
+            { label: "Name", name: "name", type: "text" },
             { label: "Email", name: "email", type: "email" },
             { label: "Password", name: "password", type: "password" },
+            {
+              label: "Confirm Password",
+              name: "confirmPassword",
+              type: "password",
+            },
           ]}
           buttons={[
             {
               type: "submit",
-              label: "Login",
+              label: "Sign Up",
               className: "button buttons--xlarge solid",
             },
             {

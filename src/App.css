@@ -2,8 +2,24 @@
     margin: 0;
     border: 0;
     box-sizing: border-box;
+    list-style: none;
+	text-decoration: none;
+	border: none;
+	outline: none;
     font-family: 'Poppins', sans-serif;
 }   
+
+main {
+    min-height: 80vh;
+    padding: 20px 25px;
+}
+
+
+.main--onboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .button{
     height: 40px;
@@ -11,6 +27,7 @@
     border-radius: 10px;
     font-size: 15px;
     font-weight: 500;
+    text-align: center;
     cursor: pointer;
 }
 
@@ -20,6 +37,12 @@
 
 .button--large {
     width: 130px;
+}
+
+.button--xlarge {
+    width: 160px;
+    height: 50px;
+    border-radius: 12px;
 }
 
 .solid {

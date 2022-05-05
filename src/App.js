@@ -1,11 +1,15 @@
 import { Routes, Route } from "react-router-dom";
-import { Login } from "./Routes/index";
+import { Index, Login, Signup, Dashboard } from "./Routes/index";
+
 import "./App.css";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />}></Route>
+      <Route path="/" element={<Index />} />
+      <Route path="login" element={<Login />} />
+      <Route path="signup" element={<Signup />} />
+      <Route path="dashboard" element={<Dashboard />} />
     </Routes>
   );
 }
