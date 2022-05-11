@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import logo from "../../Assets/myBudget.svg";
 import "./Header.css";
 
-export default function Header({ children }) {
+export default function Header({ children = null }) {
   return (
     <header>
       <Link to="/">

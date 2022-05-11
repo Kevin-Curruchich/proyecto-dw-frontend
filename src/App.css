@@ -1,3 +1,14 @@
+:root{
+    --primary-color: #F64C18;
+    --secondary-color: #EE9539;
+    --third-color: #9D6BDD;
+    --primary-gradient: linear-gradient(-35deg, var(--primary-color) -33.11%, var(--secondary-color) 99.14%);
+    --secondary-gradient: linear-gradient(15deg, #801C6A 0%, #9D6BDD 0.01%, #8BA7EF 100%);
+    --third-gradient: linear-gradient(160deg, #83489e 0%, #9558b1 50%, #c5302e 100%);
+    --fourth-gradient: linear-gradient(195deg, #f9655b 0%,  #ee821a 100%);
+    --five-gradient: linear-gradient(45deg, #f7ba2c 0%, #ecab12 10%, #ea5459 100%);
+    --six-gradient: linear-gradient(140deg, #9bafd9 0%,#7f9ee0 5%, #103783 100%);
+}
 * {
     margin: 0;
     border: 0;
@@ -31,6 +42,12 @@ main {
     cursor: pointer;
 }
 
+.button--option{
+    align-self: center;
+    width: fit-content;
+    border-radius: 5px;
+}
+
 .button--small {
     width: 100px;
 }
@@ -46,7 +63,7 @@ main {
 }
 
 .solid {
-    background: linear-gradient(359deg, #F64C18 -33.11%, #EE9539 99.14%);
+    background: var(--primary-gradient);
     color: white;
 }
 

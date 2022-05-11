@@ -7,7 +7,7 @@ export default function InputString({ label, ...props }) {
   return (
     <div className="form__input">
       <label className="form__input--label" htmlFor={props.name}>
-        {label}:
+        {label}
       </label>
       <input className="form__input--input" {...field} {...props} />
       {meta.touched && meta.error ? (

@@ -2,6 +2,7 @@ import { Formik, Form } from "formik";
 import InputString from "../../Components/Input/InputString";
 import "./Form.css";
 import "../../App.css";
+import { Link } from "react-router-dom";
 
 export default function FormLayout({
   title,
@@ -9,6 +10,7 @@ export default function FormLayout({
   validation,
   inputs,
   buttons,
+  links,
 }) {
   return (
     <div className="form">
@@ -33,6 +35,12 @@ export default function FormLayout({
           </div>
         </Form>
       </Formik>
+      {links && (
+        <div className="form__links">
+          <p>{links.label}</p>
+          <Link to={links.link}>{links.linkLabel}</Link>
+        </div>
+      )}
     </div>
   );
 }

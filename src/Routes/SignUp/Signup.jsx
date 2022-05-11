@@ -5,7 +5,7 @@ import "./Signup.css";
 
 const signupSchema = Yup.object().shape({
   name: Yup.string().required("Insert your Name"),
-  email: Yup.string().email().required("Insert email"),
+  email: Yup.string().email("Insert a valid email").required("Insert email"),
   password: Yup.string().required("Insert Password"),
   confirmPassword: Yup.string().required("Confirm Password"),
 });
@@ -25,8 +25,18 @@ export default function Signup() {
           }}
           validation={signupSchema}
           inputs={[
-            { label: "Name", name: "name", type: "text" },
-            { label: "Email", name: "email", type: "email" },
+            {
+              label: "Name",
+              placeholder: "Kevin Curruchich",
+              name: "name",
+              type: "text",
+            },
+            {
+              label: "Email",
+              placeholder: "kevin@mybudget.com",
+              name: "email",
+              type: "email",
+            },
             { label: "Password", name: "password", type: "password" },
             {
               label: "Confirm Password",
@@ -49,6 +59,11 @@ export default function Signup() {
               },
             },
           ]}
+          links={{
+            label: "Alredy have account?",
+            link: "/login",
+            linkLabel: "Login",
+          }}
         />
       </main>
     </>

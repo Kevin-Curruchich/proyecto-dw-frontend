@@ -2,7 +2,7 @@
     width: 100%;
 }
 
-.main__balances{
+.dashboard{
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -10,13 +10,46 @@
     row-gap: 15px;
 }
 
+.dashboard__header{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.dashboard__resume{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+
+.dashboard__resume--title{
+    display: flex;
+    align-items: center;
+}
+
+hr{
+    height: 1px;
+    width: 70%;
+    margin: 5px 0;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#changeCurrencie{
+    grid-column: 3/4;
+    align-self: flex-start;
+    justify-self: flex-end;
+}
+
 .balance {
+    color: white;
+    grid-column: 2/3;
     display: flex;
     flex-direction: column;
     align-items: center;
     min-width: 320px;
     padding: 10px 50px;
-    background: linear-gradient(360deg, rgba(128, 28, 106, 0.15) 0%, rgba(157, 107, 221, 0.15) 0.01%, rgba(139, 167, 239, 0.15) 100%);
+    background: var(--primary-gradient);
     border-radius: 1rem;
 }
 
@@ -32,10 +65,25 @@
     font-size: 15px;
 }
 
-.accounts {
+.dashboard__accounts {
     display: flex;
     align-items: center;
     column-gap: 15px;
+}
+
+.accounts__card:nth-child(1n){
+    color: white;
+    background: var(--six-gradient);
+}
+
+.accounts__card:nth-child(2n){
+    color: white;
+    background: var(--fourth-gradient);
+}
+
+.accounts__card:nth-child(3n){
+    color: white;
+    background: var(--five-gradient);
 }
 
 .accounts__card{
@@ -43,7 +91,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(360deg, rgba(128, 28, 106, 0.15) 0%, rgba(157, 107, 221, 0.15) 0.01%, rgba(139, 167, 239, 0.15) 100%);
+    background: var(--secondary-gradient);
     border-radius: 0.5rem;
 }
 

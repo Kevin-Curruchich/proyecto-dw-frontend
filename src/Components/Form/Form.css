@@ -16,6 +16,7 @@
     gap: 50px;
 }
 
+
 .form__title {
     font-size: 20px;
 }
@@ -27,8 +28,29 @@
     gap: 20px   
 }
 
+.form__inputs--select {
+    display: flex;
+    justify-content: space-around;
+}
+
 .form__buttons {
     width: 100%;
     display: flex;
     justify-content: space-between;
+}
+
+.form__buttons--one{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.form__links {
+    display: flex;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.form__links p {
+    opacity: 0.5;
 }
