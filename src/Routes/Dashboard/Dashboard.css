@@ -28,13 +28,6 @@
     align-items: center;
 }
 
-hr{
-    height: 1px;
-    width: 70%;
-    margin: 5px 0;
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
 #changeCurrencie{
     grid-column: 3/4;
     align-self: flex-start;

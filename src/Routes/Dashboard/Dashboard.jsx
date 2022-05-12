@@ -12,7 +12,7 @@ export default function Dashboard() {
         <div className="header__buttons--dashboard">
           <Link to="">Dashboard</Link>
           <Link to="">Record</Link>
-          <Link to="">Transfers</Link>
+          <Link to="/transfers">Transfers</Link>
           <BiFace size="2.5rem" />
         </div>
       </Header>
