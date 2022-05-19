@@ -1,4 +1,5 @@
 import { Formik, Form } from "formik";
+import "../Form/Form.css";
 
 function FormContent({
   title,
@@ -8,7 +9,7 @@ function FormContent({
   children,
 }) {
   return (
-    <div className="form record">
+    <div className="form">
       <h2 className="form__title">{title}</h2>
       <Formik
         initialValues={initialValues}

@@ -5,6 +5,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import IncomesExpenses from "./IncomesExpenses/IncomesExpenses";
 import Transfers from "./Transfers/Transfers";
 import MyAccounts from "./Transfers/MyAccounts";
+import Thirds from "./Transfers/Thirds";
 
 export {
   Index,
@@ -14,4 +15,5 @@ export {
   IncomesExpenses,
   Transfers,
   MyAccounts,
+  Thirds,
 };

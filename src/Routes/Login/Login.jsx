@@ -1,7 +1,8 @@
-import Header from "../../Components/Header/Header";
-import FormLayout from "../../Components/Form/FormLayout";
-import { useAuth0 } from "@auth0/auth0-react";
 import * as Yup from "yup";
+import { Link } from "react-router-dom";
+import Header from "../../Components/Header/Header";
+import InputString from "../../Components/Input/InputString";
+import FormContent from "../../Components/Form/FormContent";
 import "./Login.css";
 
 const loginSchema = Yup.object().shape({
@@ -10,52 +11,35 @@ const loginSchema = Yup.object().shape({
 });
 
 export default function Login() {
-  const { loginWithRedirect } = useAuth0();
-
   return (
     <>
       <Header />
       <main className="main--onboard">
-        <FormLayout
+        <FormContent
           title="Welcome Back"
           initialValues={{ email: "", password: "" }}
-          validation={loginSchema}
-          inputs={[
-            {
-              label: "Email",
-              placeholder: "example@mybudget.com",
-              name: "email",
-              type: "email",
-            },
-            {
-              label: "Password",
-              placeholder: "**********",
-              name: "password",
-              type: "password",
-            },
-          ]}
-          buttons={[
-            {
-              type: "submit",
-              label: "Login",
-              className: "button buttons--xlarge solid",
-            },
-            {
-              type: "button",
-              label: "Google",
-              className: "button buttons--xlarge border",
-              onClick: () => {
-                loginWithRedirect();
-                console.log("Hello");
-              },
-            },
-          ]}
-          links={{
-            label: "Don't have account?",
-            link: "/signup",
-            linkLabel: "Signup",
+          recordSchema={loginSchema}
+          cbSubmit={() => {
+            console.log("Login");
           }}
-        />
+        >
+          <div className="form__inputs">
+            <InputString label="Email" name="email" type="email" />
+            <InputString label="Password" name="password" type="password" />
+          </div>
+          <div className="form__buttons">
+            <button type="submit" className="button button--large solid">
+              Login
+            </button>
+            <button type="submit" className="button button--large border">
+              Google
+            </button>
+          </div>
+          <div className="form__links">
+            <p>Dont have account</p>
+            <Link to="/signup">Signup</Link>
+          </div>
+        </FormContent>
       </main>
     </>
   );

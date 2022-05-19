@@ -12,10 +12,10 @@ const recordSchema = Yup.object().shape({
   schedule: Yup.date().required("Date required"),
 });
 
-function myAccounts() {
+function Thirds() {
   return (
     <FormContent
-      title="My Accounts"
+      title="Thirds"
       initialValues={{
         origin: "Keivin 3837",
         destination: "Keivin 3837",
@@ -52,4 +52,4 @@ function myAccounts() {
   );
 }
 
-export default myAccounts;
+export default Thirds;

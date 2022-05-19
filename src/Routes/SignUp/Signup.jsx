@@ -1,13 +1,18 @@
 import Header from "../../Components/Header/Header";
-import FormLayout from "../../Components/Form/FormLayout";
+import { Link } from "react-router-dom";
+import InputString from "../../Components/Input/InputString";
+import FormContent from "../../Components/Form/FormContent";
 import * as Yup from "yup";
 import "./Signup.css";
 
 const signupSchema = Yup.object().shape({
-  name: Yup.string().required("Insert your Name"),
+  name: Yup.string().required("Insert your name"),
+  lastname: Yup.string().required("Insert your last name"),
   email: Yup.string().email("Insert a valid email").required("Insert email"),
-  password: Yup.string().required("Insert Password"),
-  confirmPassword: Yup.string().required("Confirm Password"),
+  password: Yup.string().required("Insert password"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .required("Confirm Password"),
 });
 
 export default function Signup() {
@@ -15,56 +20,44 @@ export default function Signup() {
     <>
       <Header />
       <main className="main--onboard">
-        <FormLayout
+        <FormContent
           title="Sign Up"
           initialValues={{
             name: "",
+            lastname: "",
             email: "",
             password: "",
             confirmPassword: "",
           }}
-          validation={signupSchema}
-          inputs={[
-            {
-              label: "Name",
-              placeholder: "Kevin Curruchich",
-              name: "name",
-              type: "text",
-            },
-            {
-              label: "Email",
-              placeholder: "kevin@mybudget.com",
-              name: "email",
-              type: "email",
-            },
-            { label: "Password", name: "password", type: "password" },
-            {
-              label: "Confirm Password",
-              name: "confirmPassword",
-              type: "password",
-            },
-          ]}
-          buttons={[
-            {
-              type: "submit",
-              label: "Sign Up",
-              className: "button buttons--xlarge solid",
-            },
-            {
-              type: "button",
-              label: "Google",
-              className: "button buttons--xlarge border",
-              onClick: () => {
-                console.log("Hello");
-              },
-            },
-          ]}
-          links={{
-            label: "Alredy have account?",
-            link: "/login",
-            linkLabel: "Login",
-          }}
-        />
+          recordSchema={signupSchema}
+          cbSubmit={() => console.log("signup")}
+        >
+          <div className="form__inputs">
+            <div className="form__inputs--column">
+              <InputString label="Name" name="name" type="text" />
+              <InputString label="Last Name" name="lastname" type="text" />
+            </div>
+            <InputString label="Email" name="email" type="email" />
+            <InputString label="Password" name="password" type="password" />
+            <InputString
+              label="Confirm Password"
+              name="confirmPassword"
+              type="password"
+            />
+          </div>
+          <div className="form__buttons">
+            <button type="submit" className="button button--large solid">
+              Sign UP
+            </button>
+            <button type="submit" className="button button--large border">
+              Google
+            </button>
+          </div>
+          <div className="form__links">
+            <p>Already have account?</p>
+            <Link to="/login">Login</Link>
+          </div>
+        </FormContent>
       </main>
     </>
   );

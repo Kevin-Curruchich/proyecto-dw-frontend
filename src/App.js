@@ -7,6 +7,7 @@ import {
   IncomesExpenses,
   Transfers,
   MyAccounts,
+  Thirds,
 } from "./Routes/index";
 
 import "./App.css";
@@ -21,7 +22,7 @@ function App() {
       <Route path="record" element={<IncomesExpenses />} />
       <Route path="transfers" element={<Transfers />}>
         <Route index element={<MyAccounts />} />
-        <Route path="thirds" element={<MyAccounts />} />
+        <Route path="thirds" element={<Thirds />} />
       </Route>
     </Routes>
   );

@@ -8,7 +8,7 @@ export default function Transfers() {
       <Header />
       <main className="main--transfers">
         <div className="transfers__links">
-          <Link to="myaccounts">My Counts</Link>
+          <Link to="/transfers">My Counts</Link>
           <Link to="thirds">Thirds</Link>
         </div>
         <hr className="hr--completed" />
