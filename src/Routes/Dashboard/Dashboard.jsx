@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { BiFace, BiChevronRight, BiUser } from "react-icons/bi";
+import { BiChevronRight, BiUser } from "react-icons/bi";
 import Header from "../../Components/Header/Header";
 import "./Dashboard.css";
 
@@ -8,14 +7,7 @@ const options = ["usd", "qtz"];
 export default function Dashboard() {
   return (
     <>
-      <Header>
-        <div className="header__buttons--dashboard">
-          <Link to="">Dashboard</Link>
-          <Link to="">Record</Link>
-          <Link to="/transfers">Transfers</Link>
-          <BiFace size="2.5rem" />
-        </div>
-      </Header>
+      <Header dashboard />
       <main className="main--dashboard">
         <div className="dashboard">
           <div className="dashboard__header">

@@ -23,14 +23,7 @@ export default function IncomesExpenses() {
 
   return (
     <>
-      <Header>
-        <div className="header__buttons--dashboard">
-          <Link to="">Dashboard</Link>
-          <Link to="">Record</Link>
-          <Link to="">Transfers</Link>
-          <BiFace size="2.5rem" />
-        </div>
-      </Header>
+      <Header dashboard />
       <main className="main--record">
         <FormContent
           title="My Accounts"

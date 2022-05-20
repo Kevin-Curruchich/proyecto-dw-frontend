@@ -5,7 +5,7 @@ import "./Transfers.css";
 export default function Transfers() {
   return (
     <>
-      <Header />
+      <Header dashboard />
       <main className="main--transfers">
         <div className="transfers__links">
           <Link to="/transfers">My Counts</Link>
