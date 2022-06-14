@@ -1,0 +1,9 @@
+.main__options{
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    border-radius: 15px;
+    background: var(--form-background-color);
+}

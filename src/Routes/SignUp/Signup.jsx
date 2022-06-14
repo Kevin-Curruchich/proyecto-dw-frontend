@@ -9,7 +9,7 @@ const signupSchema = Yup.object().shape({
   name: Yup.string().required("Insert your name"),
   lastname: Yup.string().required("Insert your last name"),
   email: Yup.string().email("Insert a valid email").required("Insert email"),
-  password: Yup.string().required("Insert password"),
+  password: Yup.string().min(8, "Min 8").required("Insert password"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password"),
@@ -34,8 +34,18 @@ export default function Signup() {
         >
           <div className="form__inputs">
             <div className="form__inputs--column">
-              <InputString label="Name" name="name" type="text" />
-              <InputString label="Last Name" name="lastname" type="text" />
+              <InputString
+                label="Name"
+                largeInput="medium"
+                name="name"
+                type="text"
+              />
+              <InputString
+                label="Last Name"
+                largeInput="medium"
+                name="lastname"
+                type="text"
+              />
             </div>
             <InputString label="Email" name="email" type="email" />
             <InputString label="Password" name="password" type="password" />

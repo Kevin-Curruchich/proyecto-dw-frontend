@@ -8,12 +8,20 @@
     font-size: 13px;
 }
 
+.medium{
+    width: 140px;
+}
+
+.fit{
+    width: fit-content;
+}
+
 .form__input--input{
-    width: auto;
     height: 30px;
     padding: 5px 5px 5px 10px;
     font-size: 14px;
     border-radius: 5px;
+    border: 2px solid rgba(0, 0, 0, 0.10);
 }
 
 .form__input--input::placeholder{

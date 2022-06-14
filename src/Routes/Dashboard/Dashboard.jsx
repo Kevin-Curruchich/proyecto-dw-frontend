@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { BiChevronRight, BiUser } from "react-icons/bi";
 import Header from "../../Components/Header/Header";
 import "./Dashboard.css";
@@ -43,12 +44,17 @@ export default function Dashboard() {
           <div className="dashboard__resume">
             <div className="dashboard__resume--incomes">
               <div className="dashboard__resume--title">
-                <h4>Incomes</h4> <BiChevronRight />
+                <Link to="/history/">
+                  <h4>Incomes</h4>
+                </Link>
+                <BiChevronRight />
               </div>
             </div>
             <div className="dashboard__resume--expenses">
               <div className="dashboard__resume--title">
-                <h4>Expenses</h4>
+                <Link to="/expenses">
+                  <h4>Expenses</h4>
+                </Link>
                 <BiChevronRight />
               </div>
             </div>

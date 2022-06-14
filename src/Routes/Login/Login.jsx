@@ -1,5 +1,6 @@
-import * as Yup from "yup";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import * as Yup from "yup";
 import Header from "../../Components/Header/Header";
 import InputString from "../../Components/Input/InputString";
 import FormContent from "../../Components/Form/FormContent";
@@ -19,8 +20,17 @@ export default function Login() {
           title="Welcome Back"
           initialValues={{ email: "", password: "" }}
           recordSchema={loginSchema}
-          cbSubmit={() => {
-            console.log("Login");
+          cbSubmit={(values) => {
+            // alert(JSON.stringify(values, null, 2));
+            axios({
+              method: "post",
+              url: "http://localhost:8080/login",
+              data: JSON.stringify(values, null, 2),
+            })
+              .then(() => {})
+              .catch((error) => {
+                console.error(error);
+              });
           }}
         >
           <div className="form__inputs">
@@ -31,9 +41,7 @@ export default function Login() {
             <button type="submit" className="button button--large solid">
               Login
             </button>
-            <button type="submit" className="button button--large border">
-              Google
-            </button>
+            <button className="button button--large border">Google</button>
           </div>
           <div className="form__links">
             <p>Dont have account</p>

@@ -6,7 +6,7 @@
     gap: 20px;
     padding: 35px 45px;
     border-radius: 30px;
-    background: linear-gradient(360deg, rgba(117, 0, 252, 0.2) 0%, rgba(149, 82, 238, 0.1) 0.01%, rgba(178, 200, 255, 0.3) 100%);
+    background: var(--form-background-color);
     box-shadow: 0px 10px 10px rgba(0,0, 0, 0.1);
 }   
 
@@ -31,7 +31,7 @@
 
 .form__inputs--column{
     display: flex;
-    gap: 5px;
+    gap: 10px;
 }
 
 .form__inputs--select {

@@ -8,6 +8,7 @@
     --fourth-gradient: linear-gradient(195deg, #f9655b 0%,  #ee821a 100%);
     --five-gradient: linear-gradient(45deg, #f7ba2c 0%, #ecab12 10%, #ea5459 100%);
     --six-gradient: linear-gradient(140deg, #9bafd9 0%,#7f9ee0 5%, #103783 100%);
+    --form-background-color: linear-gradient(360deg, rgba(117, 0, 252, 0.2) 0%, rgba(149, 82, 238, 0.1) 0.01%, rgba(178, 200, 255, 0.3) 100%);
 }
 * {
     margin: 0;

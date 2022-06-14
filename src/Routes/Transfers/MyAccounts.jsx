@@ -9,7 +9,7 @@ const recordSchema = Yup.object().shape({
   destination: Yup.string().required("Destination?"),
   amount: Yup.number().required("Amount?"),
   description: Yup.string(),
-  schedule: Yup.date().required("Date required"),
+  date: Yup.date().required("Date required"),
 });
 
 function myAccounts() {
@@ -21,7 +21,7 @@ function myAccounts() {
         destination: "Keivin 3837",
         amount: "",
         description: "",
-        schedule: "",
+        date: "",
       }}
       recordSchema={recordSchema}
       cbSubmit={(values) => {
@@ -41,7 +41,7 @@ function myAccounts() {
         />
         <InputString label="Amount" name="amount" type="number" />
         <Textarea label="Description" name="description" />
-        <InputString label="Schedule" name="schedule" type="date" />
+        <InputString label="Date" name="date" type="date" />
       </div>
       <div className="form__buttons--one">
         <button type="submit" className="button button--xlarge solid">
