@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/auth-context";
 import { BiChevronRight, BiUser } from "react-icons/bi";
 import Header from "../../Components/Header/Header";
 import "./Dashboard.css";
@@ -6,6 +8,15 @@ import "./Dashboard.css";
 const options = ["usd", "qtz"];
 
 export default function Dashboard() {
+  const authCtx = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (Object.entries(authCtx.currentUser).length === 0) {
+      navigate("/", { replace: true });
+    }
+  }, []);
+
   return (
     <>
       <Header dashboard />

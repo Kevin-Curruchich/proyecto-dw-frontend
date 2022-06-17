@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { useState, useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/auth-context";
 import * as Yup from "yup";
 import Header from "../../Components/Header/Header";
 import InputString from "../../Components/Input/InputString";
@@ -12,6 +13,16 @@ const loginSchema = Yup.object().shape({
 });
 
 export default function Login() {
+  const authCtx = useContext(AuthContext);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (Object.entries(authCtx.currentUser).length !== 0) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, []);
+
   return (
     <>
       <Header />
@@ -20,15 +31,14 @@ export default function Login() {
           title="Welcome Back"
           initialValues={{ email: "", password: "" }}
           recordSchema={loginSchema}
-          cbSubmit={(values) => {
-            // alert(JSON.stringify(values, null, 2));
-            axios({
-              method: "post",
-              url: "http://localhost:8080/login",
-              data: JSON.stringify(values, null, 2),
-            })
-              .then(() => {})
+          cbSubmit={async ({ email, password }) => {
+            authCtx
+              .login(email, password)
+              .then((response) => {
+                return navigate("/dashboard", { replace: true });
+              })
               .catch((error) => {
+                setError("Failed to log in");
                 console.error(error);
               });
           }}
@@ -36,6 +46,7 @@ export default function Login() {
           <div className="form__inputs">
             <InputString label="Email" name="email" type="email" />
             <InputString label="Password" name="password" type="password" />
+            {error && <p>{error}</p>}
           </div>
           <div className="form__buttons">
             <button type="submit" className="button button--large solid">

@@ -1,13 +1,15 @@
+import { useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+import AuthContext from "../../context/auth-context";
 import Header from "../../Components/Header/Header";
-import { Link } from "react-router-dom";
 import InputString from "../../Components/Input/InputString";
 import FormContent from "../../Components/Form/FormContent";
-import * as Yup from "yup";
 import "./Signup.css";
 
 const signupSchema = Yup.object().shape({
-  name: Yup.string().required("Insert your name"),
-  lastname: Yup.string().required("Insert your last name"),
+  first_name: Yup.string().required("Insert your name"),
+  last_name: Yup.string().required("Insert your last name"),
   email: Yup.string().email("Insert a valid email").required("Insert email"),
   password: Yup.string().min(8, "Min 8").required("Insert password"),
   confirmPassword: Yup.string()
@@ -16,6 +18,15 @@ const signupSchema = Yup.object().shape({
 });
 
 export default function Signup() {
+  const authCtx = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (Object.entries(authCtx.currentUser).length !== 0) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, []);
+
   return (
     <>
       <Header />
@@ -23,27 +34,35 @@ export default function Signup() {
         <FormContent
           title="Sign Up"
           initialValues={{
-            name: "",
-            lastname: "",
+            first_name: "",
+            last_name: "",
             email: "",
             password: "",
             confirmPassword: "",
           }}
           recordSchema={signupSchema}
-          cbSubmit={() => console.log("signup")}
+          cbSubmit={({ email, password, first_name, last_name }) =>
+            authCtx
+              .register(first_name, last_name, email, password)
+              .then((response) => {
+                console.log(response);
+                return navigate("/dashboard", { replace: true });
+              })
+              .catch((error) => console.log(error))
+          }
         >
           <div className="form__inputs">
             <div className="form__inputs--column">
               <InputString
                 label="Name"
                 largeInput="medium"
-                name="name"
+                name="first_name"
                 type="text"
               />
               <InputString
                 label="Last Name"
                 largeInput="medium"
-                name="lastname"
+                name="last_name"
                 type="text"
               />
             </div>
