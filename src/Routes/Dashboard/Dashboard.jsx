@@ -5,8 +5,6 @@ import { BiChevronRight, BiUser } from "react-icons/bi";
 import Header from "../../Components/Header/Header";
 import "./Dashboard.css";
 
-const options = ["usd", "qtz"];
-
 export default function Dashboard() {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
@@ -28,11 +26,6 @@ export default function Dashboard() {
               <p className="balance__mount">$3,000</p>
               <p className="balance__user">Kevin Curruchich</p>
             </div>
-            <select name="currency" id="changeCurrencie">
-              {options.map((opt) => (
-                <option key={opt}>{opt.toUpperCase()}</option>
-              ))}
-            </select>
           </div>
           <p>
             Accounts <BiUser size="1rem" />

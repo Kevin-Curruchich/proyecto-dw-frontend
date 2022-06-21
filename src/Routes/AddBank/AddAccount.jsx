@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import * as Yup from "yup";
 import FormContent from "../../Components/Form/FormContent";
 import Header from "../../Components/Header/Header";
@@ -6,13 +8,82 @@ import Select from "../../Components/Select/Select";
 
 const recordSchema = Yup.object().shape({
   bankName: Yup.string().required("Insert bank name"),
-  typeAccount: Yup.string().required("Insert type account"),
-  initialAmount: Yup.number()
-    .required("Amount?")
-    .positive("Positive number required"),
+  currencie: Yup.string().required("Select currencie"),
+  amount: Yup.number().required("Amount?").positive("Positive number required"),
 });
 
 function AddAccount() {
+  const [cookies] = useCookies(["auth_token"]);
+  const [banks, setBanks] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchBankNames = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/getbanknames`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies.auth_token}`,
+          },
+        }
+      );
+      const banks = await response.json();
+      setBanks(banks);
+    };
+
+    const fetchCurrencies = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/getcurrencies`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies.auth_token}`,
+          },
+        }
+      );
+      const currencies = await response.json();
+      setCurrencies(currencies);
+    };
+
+    fetchBankNames();
+    fetchCurrencies();
+  }, []);
+
+  const handleAddBank = (cookieToken, bankName, currencie, amount) => {
+    console.log("Ingresan variables");
+    return new Promise(async (resolve, reject) => {
+      try {
+        let response = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL}/addbank`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `Bearer ${cookies.auth_token}`,
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              cookieToken: cookieToken,
+              bankName: bankName,
+              amount: amount,
+              currencie: currencie,
+            }),
+          }
+        );
+
+        response = await response.json();
+        resolve(response);
+      } catch (error) {
+        setError(error);
+        reject(error);
+      }
+    });
+  };
+
   return (
     <>
       <Header dashboard />
@@ -21,36 +92,30 @@ function AddAccount() {
           title="Add bank account"
           initialValues={{
             bankName: "",
-            typeAccount: "CHECKING",
-            initialAmount: 0,
+            currencie: "",
+            amount: 0,
           }}
           recordSchema={recordSchema}
-          cbSubmit={(values) => {
-            alert(JSON.stringify(values, null, 2));
+          cbSubmit={({ bankName, currencie, amount }, { resetForm }) => {
+            handleAddBank(cookies.auth_token, bankName, currencie, amount)
+              .then((response) => {
+                resetForm();
+                console.log(response);
+              })
+              .catch((e) => {
+                setError("Error to add new bank");
+              });
           }}
         >
           <div className="form__inputs">
-            <InputString label="Bank Name" name="bankName" type="text" />
-
-            <Select
-              name="typeAccount"
-              label="Type account"
-              opions={["checking", "saving"]}
-            />
+            <Select name="bankName" label="Bank Name" opions={banks} />
             <div className="form__inputs--column">
-              <Select
-                name="curriencie"
-                label="Currencie"
-                opions={["Q", "USD"]}
-              />
+              <Select name="currencie" label="Currencie" opions={currencies} />
 
-              <InputString
-                label="Initial amount"
-                name="initialAmount"
-                type="number"
-              />
+              <InputString label="Initial amount" name="amount" type="number" />
             </div>
           </div>
+          {error && <p>{error}</p>}
           <div className="form__buttons--one">
             <button type="submit" className="button button--xlarge solid">
               Add

@@ -1,10 +1,22 @@
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/auth-context";
 import logo from "../../Assets/myBudget.svg";
-import { BiFace } from "react-icons/bi";
 import "./Header.css";
 
 export default function Header(typeNav) {
+  const authCtx = useContext(AuthContext);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const logoutHandle = async () => {
+    try {
+      await authCtx.logout();
+      navigate("/", { replace: true });
+    } catch (error) {
+      setError("Error to logout");
+    }
+  };
 
   let navHeader = null;
 
@@ -33,7 +45,18 @@ export default function Header(typeNav) {
         <Link to="/dashboard">Dashboard</Link>
         <Link to="/record">Record</Link>
         <Link to="/transfers">Transfers</Link>
-        <BiFace size="2.5rem" />
+        <div className="header__buttons--profile dropdown">
+          {`${authCtx.currentUser.first_name} ${authCtx.currentUser.last_name}`.toUpperCase()}
+          <div className="dropdown-content">
+            <Link to="/addbank">Add bank account</Link>
+            <button
+              onClick={logoutHandle}
+              className="button button--large border"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
