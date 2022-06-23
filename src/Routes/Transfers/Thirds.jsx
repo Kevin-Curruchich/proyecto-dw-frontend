@@ -9,7 +9,7 @@ const recordSchema = Yup.object().shape({
   destination: Yup.string().required("Destination?"),
   amount: Yup.number().required("Amount?"),
   description: Yup.string(),
-  schedule: Yup.date().required("Date required"),
+  // schedule: Yup.date().required("Date required"),
 });
 
 function Thirds() {
@@ -17,11 +17,11 @@ function Thirds() {
     <FormContent
       title="Thirds"
       initialValues={{
-        origin: "Keivin 3837",
-        destination: "Keivin 3837",
+        origin: "",
+        destination: "",
         amount: "",
         description: "",
-        schedule: "",
+        // schedule: "",
       }}
       recordSchema={recordSchema}
       cbSubmit={(values) => {
@@ -34,14 +34,14 @@ function Thirds() {
           label="Origin Account"
           opions={["Keivn 3837", "Kevin 1231"]}
         />
-        <Select
-          name="destination"
+        <InputString
           label="Destination Account"
-          opions={["Keivn 3837", "Kevin 1231"]}
+          name="destination"
+          type="text"
         />
         <InputString label="Amount" name="amount" type="number" />
         <Textarea label="Description" name="description" />
-        <InputString label="Schedule" name="schedule" type="date" />
+        {/* <InputString label="Schedule" name="schedule" type="date" /> */}
       </div>
       <div className="form__buttons--one">
         <button type="submit" className="button button--xlarge solid">
