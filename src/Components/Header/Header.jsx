@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../../context/auth-context";
 import logo from "../../Assets/myBudget.svg";
+import { BiCaretDown } from "react-icons/bi";
 import "./Header.css";
 
 export default function Header(typeNav) {
@@ -19,6 +20,30 @@ export default function Header(typeNav) {
   };
 
   let navHeader = null;
+  // (
+  //   <div className="header__buttons--dashboard">
+  //     <Link to="/dashboard">Dashboard</Link>
+  //     <Link to="/record">Record</Link>
+  //     <Link to="/transfers">Transfers</Link>
+  //     <div className="header__buttons--profile dropdown">
+  //       {`${authCtx.currentUser.first_name} ${authCtx.currentUser.last_name}`.toUpperCase()}{" "}
+  //       <BiCaretDown />
+  //       <ul className="dropdown-content">
+  //         <li className="dropdown-content-item">
+  //           <Link to="/addbank">Add bank account</Link>
+  //         </li>
+  //         <li className="dropdown-content-item">
+  //           <button
+  //             onClick={logoutHandle}
+  //             className="button button--large border"
+  //           >
+  //             Logout
+  //           </button>
+  //         </li>
+  //       </ul>
+  //     </div>
+  //   </div>
+  // );
 
   if (typeNav.home) {
     navHeader = (
@@ -46,16 +71,21 @@ export default function Header(typeNav) {
         <Link to="/record">Record</Link>
         <Link to="/transfers">Transfers</Link>
         <div className="header__buttons--profile dropdown">
-          {`${authCtx.currentUser.first_name} ${authCtx.currentUser.last_name}`.toUpperCase()}
-          <div className="dropdown-content">
-            <Link to="/addbank">Add bank account</Link>
-            <button
-              onClick={logoutHandle}
-              className="button button--large border"
-            >
-              Logout
-            </button>
-          </div>
+          {`${authCtx.currentUser.first_name} ${authCtx.currentUser.last_name}`.toUpperCase()}{" "}
+          <BiCaretDown />
+          <ul className="dropdown-content">
+            <li className="dropdown-content-item">
+              <Link to="/addbank">Add bank account</Link>
+            </li>
+            <li className="dropdown-content-item">
+              <button
+                onClick={logoutHandle}
+                className="button button--large border"
+              >
+                Logout
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     );
@@ -63,7 +93,7 @@ export default function Header(typeNav) {
 
   return (
     <header>
-      <Link to="/">
+      <Link to={`/${typeNav.dashboard ? "dashboard" : ""}`}>
         <img id="header__logo" src={logo} alt="My budget logo" />
       </Link>
       {navHeader}

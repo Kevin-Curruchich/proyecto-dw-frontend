@@ -1,0 +1,25 @@
+
+.record{
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--record-background-color);
+    transition: 300ms ease-in-out;
+}
+
+.record:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.1);
+}
+
+.record--amount{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.expense {
+    color: red;
+}
+
+.income {
+    color: rgb(35, 206, 35);
+}

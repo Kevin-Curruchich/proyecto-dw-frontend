@@ -5,6 +5,7 @@ import AuthContext from "./auth-context";
 const AuthProvider = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(["auth_token"]);
   const [currentUser, setCurrentUser] = useState({});
+  const [bankAccounts, setBankAccounts] = useState([]);
   const [loadingUserInfo, setLoadingUserInfo] = useState(true);
 
   const register = (first_name, last_name, email, password) => {
@@ -73,8 +74,36 @@ const AuthProvider = (props) => {
   const logout = () => {
     return new Promise((resolve, reject) => {
       setCurrentUser({});
+      setBankAccounts([]);
       removeCookie("auth_token");
       resolve();
+    });
+  };
+
+  const refreshBankAccounts = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL}/getbankaccounts/${cookies.auth_token}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookies.auth_token}`,
+            },
+          }
+        );
+        let { bankAccounts } = await response.json();
+        bankAccounts = bankAccounts.map((bank) => ({
+          ...bank,
+          VALUE: bank.BANK_ACCOUNT,
+          TEXT: `${bank.BANK_ACCOUNT} - ${bank.BANK_NAME}`,
+        }));
+        setBankAccounts(bankAccounts);
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
     });
   };
 
@@ -114,6 +143,8 @@ const AuthProvider = (props) => {
     register,
     login,
     logout,
+    bankAccounts,
+    refreshBankAccounts,
   };
 
   return (

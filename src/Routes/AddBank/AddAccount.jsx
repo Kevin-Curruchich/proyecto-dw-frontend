@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useCookies } from "react-cookie";
 import * as Yup from "yup";
+import AuthContext from "../../context/auth-context";
 import FormContent from "../../Components/Form/FormContent";
 import Header from "../../Components/Header/Header";
 import InputString from "../../Components/Input/InputString";
@@ -13,6 +14,7 @@ const recordSchema = Yup.object().shape({
 });
 
 function AddAccount() {
+  const authCtx = useContext(AuthContext);
   const [cookies] = useCookies(["auth_token"]);
   const [banks, setBanks] = useState([]);
   const [currencies, setCurrencies] = useState([]);
@@ -98,7 +100,8 @@ function AddAccount() {
           recordSchema={recordSchema}
           cbSubmit={({ bankName, currencie, amount }, { resetForm }) => {
             handleAddBank(cookies.auth_token, bankName, currencie, amount)
-              .then((response) => {
+              .then(async (response) => {
+                await authCtx.refreshBankAccounts();
                 resetForm();
                 console.log(response);
               })

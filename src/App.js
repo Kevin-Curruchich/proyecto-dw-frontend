@@ -28,9 +28,7 @@ function App() {
           <Route index element={<MyAccounts />} />
           <Route path="thirds" element={<Thirds />} />
         </Route>
-        <Route path="history" element={<History />}>
-          <Route path=":type/:date/:category/*" element={<h1>Hello</h1>} />
-        </Route>
+        <Route path="history/:typehistory" element={<History />} />
       </Routes>
     </AuthProvider>
   );

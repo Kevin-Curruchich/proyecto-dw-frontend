@@ -7,3 +7,15 @@
     border-radius: 15px;
     background: var(--form-background-color);
 }
+
+.history__title{
+    font-size: 25px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.history__records {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}

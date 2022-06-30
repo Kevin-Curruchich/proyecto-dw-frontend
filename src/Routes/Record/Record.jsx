@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useCookies } from "react-cookie";
 import * as Yup from "yup";
+import AuthContext from "../../context/auth-context";
 import FormContent from "../../Components/Form/FormContent";
 import Select from "../../Components/Select/Select";
 import Header from "../../Components/Header/Header";
@@ -10,19 +11,19 @@ import "./Record.css";
 
 const recordSchema = Yup.object().shape({
   bankAccount: Yup.string().required("Bank account is required"),
-  type: Yup.string().required("Type?"),
-  categorie: Yup.string().required("Categorie?"),
+  categorie: Yup.string().required("Select a Categorie"),
   description: Yup.string(),
   amount: Yup.number().required("Amount?").positive("Positive number required"),
-  // date: Yup.date().required("Date required"),
 });
 
 export default function Record() {
+  const authCtx = useContext(AuthContext);
   const [cookies] = useCookies(["auth_token"]);
   const [recordType, setRecordType] = useState([]);
+  const [filterCategories, setFilterCategories] = useState(1);
   const [recordCategorie, setRecorCategorie] = useState([]);
-  const [bankAccounts, setBankAccounts] = useState([]);
 
+  //set fetch type records and bank accounts
   useEffect(() => {
     const fetchTypeRecord = async () => {
       const response = await fetch(
@@ -35,37 +36,19 @@ export default function Record() {
           },
         }
       );
-      const banks = await response.json();
-      setRecordType(banks);
-    };
-
-    const fetchBankAccounts = async () => {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/getbankaccounts/${cookies.auth_token}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.auth_token}`,
-          },
-        }
-      );
-      let { bankAccounts } = await response.json();
-      bankAccounts = bankAccounts.map((bankAccount) => ({
-        VALUE: bankAccount.BANK_ACCOUNT,
-        TEXT: `${bankAccount.BANK_ACCOUNT} - ${bankAccount.BANK_NAME}`,
-      }));
-      setBankAccounts(bankAccounts);
+      const recordTypes = await response.json();
+      setRecordType(recordTypes);
     };
 
     fetchTypeRecord();
-    fetchBankAccounts();
   }, []);
 
+  //fetch categories after change record type
   useEffect(() => {
     const fetchCategories = async () => {
+      const typeCategories = filterCategories || 1;
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/getcategories/1`,
+        `${process.env.REACT_APP_BACKEND_URL}/getcategories/${typeCategories}`,
         {
           method: "GET",
           headers: {
@@ -80,9 +63,11 @@ export default function Record() {
     };
 
     fetchCategories();
-  }, [recordType]);
+  }, [filterCategories]);
 
+  //handle submit
   const handleSubmit = (values) => {
+    console.log(filterCategories);
     return new Promise(async (resolve, reject) => {
       const bodyValues = JSON.stringify({
         bankAccount: values.bankAccount,
@@ -92,7 +77,7 @@ export default function Record() {
       });
       try {
         //validate if record is income
-        if (Number(values.type) === 1) {
+        if (filterCategories === 1) {
           const response = await fetch(
             `${process.env.REACT_APP_BACKEND_URL}/recordincome`,
             {
@@ -137,11 +122,9 @@ export default function Record() {
           title="Record Income/Expense"
           initialValues={{
             bankAccount: "",
-            type: "",
             categorie: "",
             description: "",
             amount: 0,
-            // date: "",
           }}
           recordSchema={recordSchema}
           cbSubmit={(values, actions) => {
@@ -154,29 +137,55 @@ export default function Record() {
             <Select
               name="bankAccount"
               label="Bank Account"
-              opions={bankAccounts}
+              // opions={bankAccounts}
+              opions={authCtx.bankAccounts}
             />
             <div className="form__inputs--column">
-              <Select name="type" label="Type" opions={recordType} />
+              <div className="form__input">
+                <label className="form__input--label" htmlFor="date">
+                  Record Type
+                </label>
+                <select
+                  name="category"
+                  className="select"
+                  onChange={(e) => {
+                    setFilterCategories(Number(e.target.value));
+                  }}
+                >
+                  {recordType.map((category) => (
+                    <option key={category.VALUE} value={category.VALUE}>
+                      {category.TEXT}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <Select
                 name="categorie"
                 label="Categorie"
                 opions={recordCategorie}
               />
             </div>
-
             <Textarea label="Description" name="description" />
 
             <InputString label="Amount" name="amount" type="number" />
-            {/* <InputString label="Date" name="date" type="date" /> */}
           </div>
           <div className="form__buttons--one">
             <button type="submit" className="button button--xlarge solid">
-              Add
+              Record
             </button>
           </div>
         </FormContent>
       </main>
     </>
   );
+}
+
+{
+  /* <div className="form__inputs--column"> */
+}
+{
+  /* <Select name="type" label="Type" opions={recordType} /> */
+}
+{
+  /* </div> */
 }

@@ -19,7 +19,7 @@
 .dashboard__resume{
     width: 100%;
     display: grid;
-    gap: 20px;
+    gap: 25px;
     grid-template-columns: repeat(2, 1fr);
 }
 
@@ -29,30 +29,12 @@
     align-items: center;
 }
 
-.dashboard__resume--record{
-    padding: 20px;
-    border-radius: 20px;
-    background: var(--form-background-color);
-}
-
 .dashboard__resume__record{
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.resume__record--amount{
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.expense {
-    color: red;
-}
-
-.income {
-    color: green;
-}
 
 #changeCurrencie{
     grid-column: 3/4;
@@ -120,7 +102,7 @@
 }
 
 .accounts__card--bank{
-    font-size: 12px;
+    font-size: 13px;
     display: flex;
     flex-direction: column;
     align-items: center;
