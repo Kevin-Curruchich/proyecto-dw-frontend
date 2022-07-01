@@ -21,7 +21,8 @@ function RecordCard({ record }) {
         <BiCreditCard /> {record.BANK_ACCOUNT}
       </p>
       <p>
-        <BiCalendarAlt />{" "}
+        <BiCalendarAlt />
+        {/* {record.RECORD_DATE} */}
         {`
         ${new Intl.DateTimeFormat("es-US").format(
           new Date(record.RECORD_DATE)

@@ -14,11 +14,11 @@ const History = () => {
   const [cookies] = useCookies(["auth_token"]);
   const [recordHistory, setRecordHistory] = useState([]);
   const [recordHistoryFiltered, setRecordHistoryFiltered] = useState([]);
-  const [changeRecordHistory, setChangeRecordHistory] = useState([]);
+  const [lessThan, setLessThan] = useState("");
   const [filters, setFilters] = useState({
     category: 0,
     bankAccount: "",
-    date: new Date(),
+    date: "",
   });
 
   useEffect(() => {
@@ -52,7 +52,17 @@ const History = () => {
           },
         }
       );
-      const { data } = await response.json();
+      let { data } = await response.json();
+
+      data = data.map((record) => {
+        return {
+          ...record,
+          RECORD_DATE: new Intl.DateTimeFormat("en-US").format(
+            new Date(record.RECORD_DATE)
+          ),
+        };
+      });
+
       setRecordHistory(data);
       setRecordHistoryFiltered(data);
     };
@@ -63,13 +73,22 @@ const History = () => {
 
   //cambio filtros
   useEffect(() => {
-    console.log(filters);
-    if (filters.category === 0 && filters.bankAccount === "") {
-      console.log("Sin filtros");
+    // console.log(recordHistory);
+    //without filters
+    if (
+      filters.category === 0 &&
+      filters.bankAccount === "" &&
+      filters.date === ""
+    ) {
       setRecordHistoryFiltered(recordHistory);
     }
 
-    if (filters.bankAccount === "" && filters.category !== 0) {
+    //filted by category
+    if (
+      filters.category !== 0 &&
+      filters.bankAccount === "" &&
+      filters.date === ""
+    ) {
       const filterdByCategory = recordHistory.filter(
         (record) => record.CATEGORY === filters.category
       );
@@ -77,7 +96,12 @@ const History = () => {
       setRecordHistoryFiltered(filterdByCategory);
     }
 
-    if (filters.category === 0 && filters.bankAccount !== "") {
+    //filted by bankAccount
+    if (
+      filters.bankAccount !== "" &&
+      filters.category === 0 &&
+      filters.date === ""
+    ) {
       const filterdByBankAccount = recordHistory.filter(
         (record) => record.BANK_ACCOUNT === filters.bankAccount
       );
@@ -85,12 +109,32 @@ const History = () => {
       setRecordHistoryFiltered(filterdByBankAccount);
     }
 
-    if (filters.category !== 0 && filters.bankAccount !== "") {
-      console.log("Entra por dos filtros");
+    //filted by date
+    if (
+      filters.date !== "" &&
+      filters.category === 0 &&
+      filters.category === 0
+    ) {
+      const filterdByDate = recordHistory.filter(
+        (record) =>
+          record.RECORD_DATE >= filters.date && record.RECORD_DATE < lessThan
+      );
+
+      setRecordHistoryFiltered(filterdByDate);
+    }
+
+    //filted by 3 filters
+    if (
+      filters.category !== 0 &&
+      filters.bankAccount !== "" &&
+      filters.date !== ""
+    ) {
       const filterdByCategoryAndBankAccount = recordHistory.filter(
         (record) =>
           record.BANK_ACCOUNT === filters.bankAccount &&
-          record.CATEGORY === filters.category
+          record.CATEGORY === filters.category &&
+          record.RECORD_DATE >= filters.date &&
+          record.RECORD_DATE < lessThan
       );
 
       setRecordHistoryFiltered(filterdByCategoryAndBankAccount);
@@ -113,10 +157,25 @@ const History = () => {
               className="form__input--input fit"
               type="date"
               onChange={(e) => {
-                setFilters((prev) => ({
-                  ...prev,
-                  date: e.target.value,
-                }));
+                if (e.target.value === "")
+                  return setFilters({ ...filters, date: "" });
+                const dateSplited = e.target.value.split("-");
+                const realDate = `${dateSplited[1]}-${dateSplited[2]}-${dateSplited[0]}`;
+                setFilters({
+                  ...filters,
+                  date: new Intl.DateTimeFormat("en-US").format(
+                    new Date(realDate)
+                  ),
+                });
+                setLessThan(
+                  new Intl.DateTimeFormat("en-US").format(
+                    new Date(
+                      `${dateSplited[1]}-${Number(dateSplited[2]) + 1}-${
+                        dateSplited[0]
+                      }`
+                    )
+                  )
+                );
               }}
             />
           </div>
