@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import Header from "../../Components/Header/Header";
 import InputString from "../../Components/Input/InputString";
 import FormContent from "../../Components/Form/FormContent";
-import "./Login.css";
+import "./login.css";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email("Enter a valid email").required("Insert email"),
