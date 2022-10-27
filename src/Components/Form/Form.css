@@ -7,7 +7,7 @@
     padding: 35px 45px;
     border-radius: 30px;
     background: var(--form-background-color);
-    box-shadow: 0px 10px 10px rgba(0,0, 0, 0.1);
+    box-shadow: 0px 10px 16px rgba(0,0, 0, 0.1);
 }   
 
 .form__main {

@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../../context/auth-context";
-import logo from "../../Assets/myBudget.svg";
+import logo from "../../Assets/TransPortHeader.png";
 import { BiCaretDown } from "react-icons/bi";
 import "./Header.css";
 
@@ -68,15 +68,17 @@ export default function Header(typeNav) {
     navHeader = (
       <div className="header__buttons--dashboard">
         <Link to="/dashboard">Dashboard</Link>
-        <Link to="/record">Record</Link>
-        <Link to="/transfers">Transfers</Link>
+        <Link to="/extraction">Extracción</Link>
+        <Link to="/transfers">Venta Materia</Link>
+        <Link to="/record">Transportes</Link>
+        <Link to="/addTruck">Camiones</Link>
         <div className="header__buttons--profile dropdown">
           {`${authCtx.currentUser.first_name} ${authCtx.currentUser.last_name}`.toUpperCase()}{" "}
           <BiCaretDown />
           <ul className="dropdown-content">
-            <li className="dropdown-content-item">
+            {/* <li className="dropdown-content-item">
               <Link to="/addbank">Add bank account</Link>
-            </li>
+            </li> */}
             <li className="dropdown-content-item">
               <button
                 onClick={logoutHandle}
@@ -95,6 +97,7 @@ export default function Header(typeNav) {
     <header>
       <Link to={`/${typeNav.dashboard ? "dashboard" : ""}`}>
         <img id="header__logo" src={logo} alt="My budget logo" />
+        {/* <h1>TransPort </h1> */}
       </Link>
       {navHeader}
     </header>

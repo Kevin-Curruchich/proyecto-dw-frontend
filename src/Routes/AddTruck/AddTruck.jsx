@@ -8,12 +8,12 @@ import InputString from "../../Components/Input/InputString";
 import Select from "../../Components/Select/Select";
 
 const recordSchema = Yup.object().shape({
-  bankName: Yup.string().required("Insert bank name"),
-  currencie: Yup.string().required("Select currencie"),
-  amount: Yup.number().required("Amount?").positive("Positive number required"),
+  truckBrand: Yup.string().required("Seleccione marca de camion"),
+  tons: Yup.string().required("Seleccione toneladas"),
+  code: Yup.string().required("Código del camion"),
 });
 
-function AddAccount() {
+function AddTruck() {
   const authCtx = useContext(AuthContext);
   const [cookies] = useCookies(["auth_token"]);
   const [banks, setBanks] = useState([]);
@@ -55,7 +55,7 @@ function AddAccount() {
     fetchCurrencies();
   }, []);
 
-  const handleAddBank = (cookieToken, bankName, currencie, amount) => {
+  const handleAddBank = (cookieToken, truckBrand, tons, code) => {
     console.log("Ingresan variables");
     return new Promise(async (resolve, reject) => {
       try {
@@ -70,9 +70,9 @@ function AddAccount() {
             credentials: "include",
             body: JSON.stringify({
               cookieToken: cookieToken,
-              bankName: bankName,
-              amount: amount,
-              currencie: currencie,
+              truckBrand: truckBrand,
+              code: code,
+              tons: tons,
             }),
           }
         );
@@ -91,15 +91,15 @@ function AddAccount() {
       <Header dashboard />
       <main className="main--record">
         <FormContent
-          title="Add bank account"
+          title="Registrar Camiones"
           initialValues={{
-            bankName: "",
-            currencie: "",
-            amount: 0,
+            truckBrand: "",
+            tons: "",
+            code: "",
           }}
           recordSchema={recordSchema}
-          cbSubmit={({ bankName, currencie, amount }, { resetForm }) => {
-            handleAddBank(cookies.auth_token, bankName, currencie, amount)
+          cbSubmit={({ truckBrand, tons, code }, { resetForm }) => {
+            handleAddBank(cookies.auth_token, truckBrand, tons, code)
               .then(async (response) => {
                 await authCtx.refreshBankAccounts();
                 resetForm();
@@ -111,11 +111,10 @@ function AddAccount() {
           }}
         >
           <div className="form__inputs">
-            <Select name="bankName" label="Bank Name" opions={banks} />
+            <Select name="truckBrand" label="Marca de camion" opions={banks} />
             <div className="form__inputs--column">
-              <Select name="currencie" label="Currencie" opions={currencies} />
-
-              <InputString label="Initial amount" name="amount" type="number" />
+              <Select name="tons" label="Toneladas" opions={currencies} />
+              <InputString label="Codigo unico" name="code" type="text" />
             </div>
           </div>
           {error && <p>{error}</p>}
@@ -130,4 +129,4 @@ function AddAccount() {
   );
 }
 
-export default AddAccount;
+export default AddTruck;

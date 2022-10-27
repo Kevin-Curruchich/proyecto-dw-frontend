@@ -17,8 +17,8 @@ export default function Login() {
     <>
       <Header home />
       <main className="main--index">
-        <h2 id="slogan">Spend, save and enjoy</h2>
-        <p>The best place to organice your finances</p>
+        <h2 id="slogan">TransPort</h2>
+        <p>Creando una mejor Guatemala</p>
       </main>
     </>
   );

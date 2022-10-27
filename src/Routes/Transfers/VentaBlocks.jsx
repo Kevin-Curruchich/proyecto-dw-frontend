@@ -8,13 +8,15 @@ import Textarea from "../../Components/Textarea/Textarea";
 import * as Yup from "yup";
 
 const recordSchema = Yup.object().shape({
-  bankAccountOut: Yup.string().required("Origin?"),
-  bankAccountIn: Yup.string().required("Destination?"),
-  amountOut: Yup.number().required("Amount?"),
-  description: Yup.string(),
+  LoteMateriaPrima: Yup.string().required(
+    "Seleccione un lote de materia prima"
+  ),
+  empleadoVenta: Yup.string().required("Seleccione empleado"),
+  monotMinimo: Yup.number().required("Monto minimo al lote requerido"),
+  notas: Yup.string(),
 });
 
-function MyAccounts() {
+function VentaBlocks() {
   const authCtx = useContext(AuthContext);
   const [cookies] = useCookies(["auth_token"]);
   const [error, setError] = useState("");
@@ -47,12 +49,12 @@ function MyAccounts() {
   return (
     <section className="main--form">
       <FormContent
-        title="My Accounts"
+        title="Venta de Blocks"
         initialValues={{
-          bankAccountOut: "",
-          bankAccountIn: "",
-          amountOut: "",
-          description: "",
+          LoteMateriaPrima: "",
+          empleadoVenta: "",
+          monotMinimo: "",
+          notas: "",
         }}
         recordSchema={recordSchema}
         cbSubmit={(values, actions) => {
@@ -65,17 +67,17 @@ function MyAccounts() {
       >
         <div className="form__inputs">
           <Select
-            name="bankAccountOut"
-            label="Origin Account"
+            name="LoteMateriaPrima"
+            label="Materia prima"
             opions={authCtx.bankAccounts}
           />
           <Select
-            name="bankAccountIn"
-            label="Destination Account"
+            name="empleadoVenta"
+            label="Empleado encargado"
             opions={authCtx.bankAccounts}
           />
-          <InputString label="Amount" name="amountOut" type="number" />
-          <Textarea label="Description" name="description" />
+          <InputString label="Precio minimo" name="monotMinimo" type="number" />
+          <Textarea label="Notas" name="notas" />
         </div>
         {error && <p className="form__error">{error}</p>}
         <div className="form__buttons--one">
@@ -88,4 +90,4 @@ function MyAccounts() {
   );
 }
 
-export default MyAccounts;
+export default VentaBlocks;

@@ -1,0 +1,11 @@
+.transfers__links{
+    display: flex;
+    gap: 25px;
+    width: 100%;
+    align-items: center;
+}
+
+.main--form {
+    display: flex;
+    justify-content: center;
+}

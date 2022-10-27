@@ -1,14 +1,14 @@
 import { Link, Outlet } from "react-router-dom";
 import Header from "../../Components/Header/Header";
-import "./Transfers.css";
+import "./Extraccion.css";
 
-export default function Transfers() {
+export default function Extraccion() {
   return (
     <>
       <Header dashboard />
       <main className="main--transfers">
         <div className="transfers__links">
-          <Link to="/transfers">Pisos</Link>|<Link to="thirds">Blocks</Link>
+          <Link to="/extraction">Pisos</Link>|<Link to="blocks">Blocks</Link>
         </div>
         <hr className="hr--completed" />
         <Outlet />

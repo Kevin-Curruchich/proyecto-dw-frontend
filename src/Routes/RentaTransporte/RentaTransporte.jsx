@@ -10,10 +10,12 @@ import InputString from "../../Components/Input/InputString";
 import "./Record.css";
 
 const recordSchema = Yup.object().shape({
-  bankAccount: Yup.string().required("Bank account is required"),
+  idCamion: Yup.string().required("Seleccione un camion"),
   categorie: Yup.string().required("Select a Categorie"),
   description: Yup.string(),
-  amount: Yup.number().required("Amount?").positive("Positive number required"),
+  precioAlquiler: Yup.number()
+    .required("Amount?")
+    .positive("Positive number required"),
 });
 
 export default function Record() {
@@ -70,9 +72,9 @@ export default function Record() {
     console.log(filterCategories);
     return new Promise(async (resolve, reject) => {
       const bodyValues = JSON.stringify({
-        bankAccount: values.bankAccount,
+        idCamion: values.idCamion,
         category: Number(values.categorie),
-        amount: Number(values.amount),
+        precioAlquiler: Number(values.precioAlquiler),
         description: values.description,
       });
       try {
@@ -119,12 +121,12 @@ export default function Record() {
       <Header dashboard />
       <main className="main--record">
         <FormContent
-          title="Record Income/Expense"
+          title="Alquiler de transporte"
           initialValues={{
-            bankAccount: "",
+            idCamion: "",
             categorie: "",
             description: "",
-            amount: 0,
+            precioAlquiler: 0,
           }}
           recordSchema={recordSchema}
           cbSubmit={(values, actions) => {
@@ -135,8 +137,8 @@ export default function Record() {
         >
           <div className="form__inputs">
             <Select
-              name="bankAccount"
-              label="Bank Account"
+              name="idCamion"
+              label="Camion"
               // opions={bankAccounts}
               opions={authCtx.bankAccounts}
             />
@@ -165,9 +167,8 @@ export default function Record() {
                 opions={recordCategorie}
               />
             </div>
+            <InputString label="Precio" name="precioAlquiler" type="number" />
             <Textarea label="Description" name="description" />
-
-            <InputString label="Amount" name="amount" type="number" />
           </div>
           <div className="form__buttons--one">
             <button type="submit" className="button button--xlarge solid">
@@ -178,14 +179,4 @@ export default function Record() {
       </main>
     </>
   );
-}
-
-{
-  /* <div className="form__inputs--column"> */
-}
-{
-  /* <Select name="type" label="Type" opions={recordType} /> */
-}
-{
-  /* </div> */
 }

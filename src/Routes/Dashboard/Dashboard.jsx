@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../../context/auth-context";
-import { BiChevronRight, BiUser } from "react-icons/bi";
+import { BiChevronRight, BiMoney } from "react-icons/bi";
 import Header from "../../Components/Header/Header";
 import RecordCard from "../../Components/RecordCard/RecordCard";
 import "./Dashboard.css";
@@ -14,51 +14,51 @@ export default function Dashboard() {
   const [recordHistoryIncomes, setRecordHistoryIncomes] = useState([]);
   const [recordHistoryExpenses, setRecordHistoryExpenses] = useState([]);
 
-  useEffect(() => {
-    if (Object.entries(authCtx.currentUser).length === 0) {
-      navigate("/", { replace: true });
-    }
+  // useEffect(() => {
+  //   if (Object.entries(authCtx.currentUser).length === 0) {
+  //     navigate("/", { replace: true });
+  //   }
 
-    //traer todos los records del usuario
-    const fetchRecordHistory = async () => {
-      const responseIncomes = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/getrecordhistory/${cookies.auth_token}/1`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.auth_token}`,
-          },
-        }
-      );
+  //   //traer todos los records del usuario
+  //   const fetchRecordHistory = async () => {
+  //     const responseIncomes = await fetch(
+  //       `${process.env.REACT_APP_BACKEND_URL}/getrecordhistory/${cookies.auth_token}/1`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${cookies.auth_token}`,
+  //         },
+  //       }
+  //     );
 
-      const { data: dataIncomes } = await responseIncomes.json();
-      const lastRecordsIncomes = dataIncomes
-        .sort((a, b) => new Date(b.RECORD_DATE) - new Date(a.RECORD_DATE))
-        .slice(0, 2);
-      setRecordHistoryIncomes(lastRecordsIncomes);
+  //     const { data: dataIncomes } = await responseIncomes.json();
+  //     const lastRecordsIncomes = dataIncomes
+  //       .sort((a, b) => new Date(b.RECORD_DATE) - new Date(a.RECORD_DATE))
+  //       .slice(0, 2);
+  //     setRecordHistoryIncomes(lastRecordsIncomes);
 
-      const responseExpenses = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/getrecordhistory/${cookies.auth_token}/2`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.auth_token}`,
-          },
-        }
-      );
+  //     const responseExpenses = await fetch(
+  //       `${process.env.REACT_APP_BACKEND_URL}/getrecordhistory/${cookies.auth_token}/2`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${cookies.auth_token}`,
+  //         },
+  //       }
+  //     );
 
-      const { data: dataExpenses } = await responseExpenses.json();
-      const lastRecordsExpenses = dataExpenses
-        .sort((a, b) => new Date(b.RECORD_DATE) - new Date(a.RECORD_DATE))
-        .slice(0, 2);
+  //     const { data: dataExpenses } = await responseExpenses.json();
+  //     const lastRecordsExpenses = dataExpenses
+  //       .sort((a, b) => new Date(b.RECORD_DATE) - new Date(a.RECORD_DATE))
+  //       .slice(0, 2);
 
-      setRecordHistoryExpenses(lastRecordsExpenses);
-    };
-    fetchRecordHistory();
-    authCtx.refreshBankAccounts();
-  }, []);
+  //     setRecordHistoryExpenses(lastRecordsExpenses);
+  //   };
+  //   fetchRecordHistory();
+  //   authCtx.refreshBankAccounts();
+  // }, []);
 
   return (
     <>
@@ -68,23 +68,27 @@ export default function Dashboard() {
           {authCtx.bankAccounts ? (
             <>
               <p>
-                Accounts <BiUser size="1rem" />
+                Presupuestos <BiMoney size="1rem" />
               </p>
               <div className="dashboard__accounts">
-                {authCtx.bankAccounts.map((bankAccount) => (
-                  <div
-                    className="accounts__card"
-                    key={bankAccount.BANK_ACCOUNT}
-                  >
+                {/* {authCtx.bankAccounts.map((bankAccount) => ( */}
+                {[
+                  {
+                    giroNegocioId: "TP01",
+                    moneda: "GTQ",
+                    presupuesto: 3222,
+                    giroNegocioNombre: "Mineria",
+                  },
+                ].map((bankAccount) => (
+                  <div className="accounts__card" key={bankAccount.giroNegocio}>
                     <p className="accounts__card--mount">
                       {new Intl.NumberFormat("en-US", {
                         style: "currency",
-                        currency: bankAccount.CURRENCIE,
-                      }).format(bankAccount.AMOUNT)}
+                        currency: bankAccount.moneda,
+                      }).format(bankAccount.presupuesto)}
                     </p>
                     <div className="accounts__card--bank">
-                      <p>{bankAccount.BANK_NAME}</p>
-                      <p>{bankAccount.BANK_ACCOUNT}</p>
+                      <p>{bankAccount.giroNegocioNombre}</p>
                     </div>
                   </div>
                 ))}
@@ -93,7 +97,7 @@ export default function Dashboard() {
           ) : (
             <button
               onClick={() => {
-                navigate("/addbank", { replace: true });
+                navigate("/addTruck", { replace: true });
               }}
               className="button solid"
             >
@@ -105,7 +109,7 @@ export default function Dashboard() {
             <div className="dashboard__resume--incomes dashboard__resume__record">
               <div className="dashboard__resume--title">
                 <Link to="/history/incomes">
-                  <h4>Incomes</h4>
+                  <h4>Ventas materia prima</h4>
                 </Link>
                 <BiChevronRight />
               </div>
@@ -116,7 +120,7 @@ export default function Dashboard() {
             <div className="dashboard__resume--expenses dashboard__resume__record">
               <div className="dashboard__resume--title">
                 <Link to="/history/expenses">
-                  <h4>Expenses</h4>
+                  <h4>Alquiler transportes</h4>
                 </Link>
                 <BiChevronRight />
               </div>

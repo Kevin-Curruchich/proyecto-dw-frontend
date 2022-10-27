@@ -2,11 +2,14 @@ import Index from "./Index/Index";
 import Login from "./Login/Login";
 import Signup from "./SignUp/Signup";
 import Dashboard from "./Dashboard/Dashboard";
-import Record from "./Record/Record";
+import RentaTransporte from "./RentaTransporte/RentaTransporte";
 import Transfers from "./Transfers/Transfers";
-import MyAccounts from "./Transfers/MyAccounts";
-import Thirds from "./Transfers/Thirds";
-import AddAccount from "./AddBank/AddAccount";
+import VentaPisos from "./Transfers/VentaPisos";
+import VentaBlocks from "./Transfers/VentaBlocks";
+import Extraccion from "./Extraccion/Extraccion";
+import ExtraccionPisos from "./Extraccion/ExtraccionPisos";
+import ExtraccionBlocks from "./Extraccion/ExtraccionBlocks";
+import AddTruck from "./AddTruck/AddTruck";
 import History from "./History/History";
 
 export {
@@ -14,10 +17,13 @@ export {
   Login,
   Signup,
   Dashboard,
-  Record,
+  RentaTransporte,
   Transfers,
-  MyAccounts,
-  Thirds,
-  AddAccount,
+  Extraccion,
+  ExtraccionPisos,
+  ExtraccionBlocks,
+  VentaPisos,
+  VentaBlocks,
+  AddTruck,
   History,
 };

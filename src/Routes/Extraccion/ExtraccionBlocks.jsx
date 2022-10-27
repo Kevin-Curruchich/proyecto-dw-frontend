@@ -8,14 +8,15 @@ import Textarea from "../../Components/Textarea/Textarea";
 import * as Yup from "yup";
 
 const recordSchema = Yup.object().shape({
-  bankAccountOut: Yup.string().required("Origin?"),
-  bankAccountIn: Yup.string().required("Destination?"),
-  amountOut: Yup.number().required("Amount?"),
-  description: Yup.string(),
-  // schedule: Yup.date().required("Date required"),
+  LoteMateriaPrima: Yup.string().required(
+    "Seleccione un lote de materia prima"
+  ),
+  empleadoVenta: Yup.string().required("Seleccione empleado"),
+  monotMinimo: Yup.number().required("Monto minimo al lote requerido"),
+  notas: Yup.string(),
 });
 
-function Thirds() {
+function ExtraccionBlocks() {
   const authCtx = useContext(AuthContext);
   const [cookies] = useCookies(["auth_token"]);
   const [error, setError] = useState("");
@@ -40,25 +41,23 @@ function Thirds() {
         if (!response.transferCompleted) return reject(response);
         resolve(response);
       } catch (error) {
-        console.log(error);
         reject(error);
       }
     });
   };
+
   return (
     <section className="main--form">
       <FormContent
-        title="Thirds"
+        title="Materia Prima Blocks"
         initialValues={{
-          bankAccountOut: "",
-          bankAccountIn: "",
-          amountOut: "",
-          description: "",
-          // schedule: "",
+          LoteMateriaPrima: "",
+          empleadoVenta: "",
+          monotMinimo: "",
+          notas: "",
         }}
         recordSchema={recordSchema}
         cbSubmit={(values, actions) => {
-          alert(JSON.stringify(values, null, 2));
           handleSubmit(values)
             .then((response) => actions.resetForm())
             .catch((error) => {
@@ -68,20 +67,19 @@ function Thirds() {
       >
         <div className="form__inputs">
           <Select
-            name="bankAccountOut"
-            label="Origin Account"
+            name="LoteMateriaPrima"
+            label="Materia prima"
             opions={authCtx.bankAccounts}
           />
-          <InputString
-            label="Destination Account"
-            name="bankAccountIn"
-            type="text"
+          <Select
+            name="empleadoVenta"
+            label="Empleado encargado"
+            opions={authCtx.bankAccounts}
           />
-          <InputString label="Amount" name="amountOut" type="number" />
-          <Textarea label="Description" name="description" />
-          {/* <InputString label="Schedule" name="schedule" type="date" /> */}
-          {error && <p className="form__error">{error}</p>}
+          <InputString label="Precio minimo" name="monotMinimo" type="number" />
+          <Textarea label="Notas" name="notas" />
         </div>
+        {error && <p className="form__error">{error}</p>}
         <div className="form__buttons--one">
           <button type="submit" className="button button--xlarge solid">
             Transfer
@@ -92,4 +90,4 @@ function Thirds() {
   );
 }
 
-export default Thirds;
+export default ExtraccionBlocks;

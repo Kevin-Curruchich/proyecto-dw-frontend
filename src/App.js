@@ -4,11 +4,14 @@ import {
   Login,
   Signup,
   Dashboard,
-  Record,
+  RentaTransporte,
   Transfers,
-  MyAccounts,
-  Thirds,
-  AddAccount,
+  VentaPisos,
+  VentaBlocks,
+  Extraccion,
+  ExtraccionPisos,
+  ExtraccionBlocks,
+  AddTruck,
   History,
 } from "./Routes/index";
 import AuthProvider from "./context/AuthProvier";
@@ -22,11 +25,15 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="record" element={<Record />} />
-        <Route path="addbank" element={<AddAccount />} />
+        <Route path="record" element={<RentaTransporte />} />
+        <Route path="addTruck" element={<AddTruck />} />
         <Route path="transfers" element={<Transfers />}>
-          <Route index element={<MyAccounts />} />
-          <Route path="thirds" element={<Thirds />} />
+          <Route index element={<VentaPisos />} />
+          <Route path="thirds" element={<VentaBlocks />} />
+        </Route>
+        <Route path="extraction" element={<Extraccion />}>
+          <Route index element={<ExtraccionPisos />} />
+          <Route path="blocks" element={<ExtraccionBlocks />} />
         </Route>
         <Route path="history/:typehistory" element={<History />} />
       </Routes>
