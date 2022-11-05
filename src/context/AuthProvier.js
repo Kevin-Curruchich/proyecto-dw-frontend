@@ -18,7 +18,7 @@ const AuthProvider = (props) => {
             headers: {
               "Content-Type": "application/json",
             },
-            credentials: "include",
+            // credentials: "include",
             body: JSON.stringify({
               email,
               password,
@@ -28,9 +28,10 @@ const AuthProvider = (props) => {
           }
         );
         response = await response.json();
-        setCookie("auth_token", response.data.auth_token, {
-          expires: new Date(2147483647 * 1000),
-        });
+        // setCookie("auth_token", response.data.auth_token, {
+        //   expires: new Date(2147483647 * 1000),
+        // });
+        console.log({ response });
         setCurrentUser(response.data);
         resolve(response);
       } catch (e) {

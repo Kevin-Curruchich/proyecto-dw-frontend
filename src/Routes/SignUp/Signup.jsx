@@ -21,11 +21,11 @@ export default function Signup() {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (Object.entries(authCtx.currentUser).length !== 0) {
-      navigate("/dashboard", { replace: true });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (Object.entries(authCtx.currentUser).length !== 0) {
+  //     navigate("/dashboard", { replace: true });
+  //   }
+  // }, []);
 
   return (
     <>

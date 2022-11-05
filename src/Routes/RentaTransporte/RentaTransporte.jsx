@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { useCookies } from "react-cookie";
 import * as Yup from "yup";
-import AuthContext from "../../context/auth-context";
+// import AuthContext from "../../context/auth-context";
 import FormContent from "../../Components/Form/FormContent";
 import Select from "../../Components/Select/Select";
 import Header from "../../Components/Header/Header";
@@ -11,100 +10,109 @@ import "./Record.css";
 
 const recordSchema = Yup.object().shape({
   idCamion: Yup.string().required("Seleccione un camion"),
-  categorie: Yup.string().required("Select a Categorie"),
-  description: Yup.string(),
+  departamento: Yup.string().required("Seleccione un departamento"),
+  categorie: Yup.string().required("Seleccione una categoria"),
   precioAlquiler: Yup.number()
-    .required("Amount?")
-    .positive("Positive number required"),
+    .required("Requerido")
+    .positive("Numero debe ser positivo"),
+  description: Yup.string(),
 });
 
 export default function Record() {
-  const authCtx = useContext(AuthContext);
-  const [cookies] = useCookies(["auth_token"]);
-  const [recordType, setRecordType] = useState([]);
-  const [filterCategories, setFilterCategories] = useState(1);
-  const [recordCategorie, setRecorCategorie] = useState([]);
+  // const authCtx = useContext(AuthContext);
+  const [rentalType, setRentalType] = useState([]);
+  const [allDepartments, setAllDepartments] = useState([]);
+  const [allTrucks, setAllTrucks] = useState([]);
+  const [error, setError] = useState("");
 
   //set fetch type records and bank accounts
   useEffect(() => {
-    const fetchTypeRecord = async () => {
+    const fetchAllTrucks = async () => {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/getrecordtypes`,
+        `${process.env.REACT_APP_BACKEND_URL}/get-all-trucks`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.auth_token}`,
           },
         }
       );
-      const recordTypes = await response.json();
-      setRecordType(recordTypes);
+      const allTrucks = await response.json();
+      console.log({ allTrucks });
+      const allTruckFormat = allTrucks.data.map((truck) => {
+        return {
+          VALUE: truck.TRUCK_UNIQUE_CODE,
+          TEXT: `${truck.truck_brand}-${truck.TRUCK_UNIQUE_CODE}`,
+        };
+      });
+      setAllTrucks([...allTruckFormat]);
     };
 
-    fetchTypeRecord();
-  }, []);
-
-  //fetch categories after change record type
-  useEffect(() => {
     const fetchCategories = async () => {
-      const typeCategories = filterCategories || 1;
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/getcategories/${typeCategories}`,
+        `${process.env.REACT_APP_BACKEND_URL}/get-departments`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.auth_token}`,
           },
-          credentials: "include",
         }
       );
-      const categories = await response.json();
-      setRecorCategorie(categories);
+      const allDepartments = await response.json();
+      console.log({ allDepartments });
+      const allDeparmentsFormat = allDepartments.data.map((department) => {
+        return {
+          VALUE: department.departament_id,
+          TEXT: department.departament_label,
+        };
+      });
+      setAllDepartments([...allDeparmentsFormat]);
+    };
+
+    const fetchRentalTrasnportTypes = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/get-transport-rental-types`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const allRentalTypes = await response.json();
+      console.log({ allRentalTypes });
+      const allRentalTypesFormat = allRentalTypes.data.map((rental) => {
+        return {
+          VALUE: rental.id_tipo_alquiler,
+          TEXT: rental.tipo_alquiler_label,
+        };
+      });
+      setRentalType([...allRentalTypesFormat]);
     };
 
     fetchCategories();
-  }, [filterCategories]);
+    fetchAllTrucks();
+    fetchRentalTrasnportTypes();
+  }, []);
 
   //handle submit
   const handleSubmit = (values) => {
-    console.log(filterCategories);
     return new Promise(async (resolve, reject) => {
       const bodyValues = JSON.stringify({
         idCamion: values.idCamion,
-        category: Number(values.categorie),
+        departamento: values.departamento,
+        category: values.categorie,
         precioAlquiler: Number(values.precioAlquiler),
         description: values.description,
       });
       try {
-        //validate if record is income
-        if (filterCategories === 1) {
-          const response = await fetch(
-            `${process.env.REACT_APP_BACKEND_URL}/recordincome`,
-            {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-                Authorization: `Bearer ${cookies.auth_token}`,
-              },
-              credentials: "include",
-              body: bodyValues,
-            }
-          );
-          const data = await response.json();
-          return resolve(data);
-        }
-        //if not is icome we are going to record expense
         const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/recordexpense`,
+          `${process.env.REACT_APP_BACKEND_URL}/post-transport-rental`,
           {
             method: "POST",
             headers: {
               "content-type": "application/json",
-              Authorization: `Bearer ${cookies.auth_token}`,
             },
-            credentials: "include",
             body: bodyValues,
           }
         );
@@ -124,55 +132,45 @@ export default function Record() {
           title="Alquiler de transporte"
           initialValues={{
             idCamion: "",
+            departamento: "",
             categorie: "",
             description: "",
             precioAlquiler: 0,
           }}
           recordSchema={recordSchema}
-          cbSubmit={(values, actions) => {
-            handleSubmit(values).then((data) => {
-              actions.resetForm();
-            });
+          cbSubmit={(values, { resetForm }) => {
+            handleSubmit(values)
+              .then(() => {
+                setError("Alquiler registrado correctamente");
+                setTimeout(() => {
+                  setError("");
+                }, 5000);
+                resetForm();
+              })
+              .catch((e) => {
+                setError("Error al regitrar alquiler");
+              });
           }}
         >
           <div className="form__inputs">
-            <Select
-              name="idCamion"
-              label="Camion"
-              // opions={bankAccounts}
-              opions={authCtx.bankAccounts}
-            />
+            <Select name="idCamion" label="Camion" opions={allTrucks} />
             <div className="form__inputs--column">
               <div className="form__input">
-                <label className="form__input--label" htmlFor="date">
-                  Record Type
-                </label>
-                <select
-                  name="category"
-                  className="select"
-                  onChange={(e) => {
-                    setFilterCategories(Number(e.target.value));
-                  }}
-                >
-                  {recordType.map((category) => (
-                    <option key={category.VALUE} value={category.VALUE}>
-                      {category.TEXT}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  name="departamento"
+                  label="Departamento"
+                  opions={allDepartments}
+                />
               </div>
-              <Select
-                name="categorie"
-                label="Categorie"
-                opions={recordCategorie}
-              />
+              <Select name="categorie" label="Categoria" opions={rentalType} />
             </div>
             <InputString label="Precio" name="precioAlquiler" type="number" />
             <Textarea label="Description" name="description" />
           </div>
+          {error && <p>{error}</p>}
           <div className="form__buttons--one">
             <button type="submit" className="button button--xlarge solid">
-              Record
+              Alquilar
             </button>
           </div>
         </FormContent>

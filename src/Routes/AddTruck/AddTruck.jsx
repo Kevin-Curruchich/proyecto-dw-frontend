@@ -16,60 +16,74 @@ const recordSchema = Yup.object().shape({
 function AddTruck() {
   const authCtx = useContext(AuthContext);
   const [cookies] = useCookies(["auth_token"]);
-  const [banks, setBanks] = useState([]);
-  const [currencies, setCurrencies] = useState([]);
+  const [truckBrands, setTruckBrands] = useState([]);
+  const [truckTons, setTruckTons] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchBankNames = async () => {
+    const fetchTruckBrands = async () => {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/getbanknames`,
+        `${process.env.REACT_APP_BACKEND_URL}/gettruckbrands`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.auth_token}`,
           },
         }
       );
-      const banks = await response.json();
-      setBanks(banks);
+      const truckBrands = await response.json();
+      console.log({ truckBrands });
+      const formatTrucksOptions = truckBrands.data.map((brand) => {
+        return {
+          VALUE: brand.truck_brand_id,
+          TEXT: brand.truck_brand,
+        };
+      });
+      console.log({ formatTrucksOptions });
+
+      setTruckBrands(formatTrucksOptions);
     };
 
-    const fetchCurrencies = async () => {
+    const fetchTruckTons = async () => {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/getcurrencies`,
+        `${process.env.REACT_APP_BACKEND_URL}/gettrucktons`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.auth_token}`,
           },
         }
       );
-      const currencies = await response.json();
-      setCurrencies(currencies);
+      const truckTonds = await response.json();
+      console.log({ truckTonds });
+      const formatTruckTons = truckTonds.data.map((tone) => {
+        return {
+          VALUE: tone.truck_ton_id,
+          TEXT: tone.truck_tone_capacity,
+        };
+      });
+      console.log({ formatTruckTons });
+
+      setTruckTons(formatTruckTons);
     };
 
-    fetchBankNames();
-    fetchCurrencies();
+    fetchTruckBrands();
+    fetchTruckTons();
   }, []);
 
-  const handleAddBank = (cookieToken, truckBrand, tons, code) => {
-    console.log("Ingresan variables");
+  const handleAddTruck = (truckBrand, tons, code) => {
     return new Promise(async (resolve, reject) => {
       try {
         let response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/addbank`,
+          `${process.env.REACT_APP_BACKEND_URL}/addtruck`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               // Authorization: `Bearer ${cookies.auth_token}`,
             },
-            credentials: "include",
+            // credentials: "include",
             body: JSON.stringify({
-              cookieToken: cookieToken,
               truckBrand: truckBrand,
               code: code,
               tons: tons,
@@ -78,6 +92,7 @@ function AddTruck() {
         );
 
         response = await response.json();
+        console.log({ response });
         resolve(response);
       } catch (error) {
         setError(error);
@@ -99,28 +114,35 @@ function AddTruck() {
           }}
           recordSchema={recordSchema}
           cbSubmit={({ truckBrand, tons, code }, { resetForm }) => {
-            handleAddBank(cookies.auth_token, truckBrand, tons, code)
-              .then(async (response) => {
-                await authCtx.refreshBankAccounts();
+            handleAddTruck(truckBrand, tons, code)
+              .then(async () => {
+                // await authCtx.refreshBankAccounts();
+                setError("Camion registrado correctamente");
+                setTimeout(() => {
+                  setError("");
+                }, 5000);
                 resetForm();
-                console.log(response);
               })
               .catch((e) => {
-                setError("Error to add new bank");
+                setError("Error al regitrar camion");
               });
           }}
         >
           <div className="form__inputs">
-            <Select name="truckBrand" label="Marca de camion" opions={banks} />
+            <Select
+              name="truckBrand"
+              label="Marca de camion"
+              opions={truckBrands}
+            />
             <div className="form__inputs--column">
-              <Select name="tons" label="Toneladas" opions={currencies} />
+              <Select name="tons" label="Toneladas" opions={truckTons} />
               <InputString label="Codigo unico" name="code" type="text" />
             </div>
           </div>
           {error && <p>{error}</p>}
           <div className="form__buttons--one">
             <button type="submit" className="button button--xlarge solid">
-              Add
+              Registrar
             </button>
           </div>
         </FormContent>
