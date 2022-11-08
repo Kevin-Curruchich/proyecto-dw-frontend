@@ -48,7 +48,7 @@ export default function Record() {
       setAllTrucks([...allTruckFormat]);
     };
 
-    const fetchCategories = async () => {
+    const fetchDepartments = async () => {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/get-departments`,
         {
@@ -90,7 +90,7 @@ export default function Record() {
       setRentalType([...allRentalTypesFormat]);
     };
 
-    fetchCategories();
+    fetchDepartments();
     fetchAllTrucks();
     fetchRentalTrasnportTypes();
   }, []);

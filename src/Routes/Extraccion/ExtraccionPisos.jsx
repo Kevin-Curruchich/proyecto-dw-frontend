@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import AuthContext from "../../context/auth-context";
 import Select from "../../Components/Select/Select";
@@ -11,6 +11,7 @@ const recordSchema = Yup.object().shape({
   LoteMateriaPrima: Yup.string().required(
     "Seleccione un lote de materia prima"
   ),
+  departamento: Yup.string().required("Seleccione ubicacion"),
   empleadoVenta: Yup.string().required("Seleccione empleado"),
   monotMinimo: Yup.number().required("Monto minimo al lote requerido"),
   notas: Yup.string(),
@@ -19,7 +20,82 @@ const recordSchema = Yup.object().shape({
 function ExtraccionPisos() {
   const authCtx = useContext(AuthContext);
   const [cookies] = useCookies(["auth_token"]);
+  const [allDepartments, setAllDepartments] = useState([]);
+  const [rawMaterial, setRawMaterial] = useState([]);
   const [error, setError] = useState("");
+
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    const fetchAllEmployees = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/get-employees`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const allEmployees = await response.json();
+      // console.log({ allEmployees });
+      const employeeFormatData = allEmployees.data.map((employee) => {
+        return {
+          VALUE: employee.id_personal,
+          TEXT: `${employee.P_nombre} ${employee.P_apellido}`,
+        };
+      });
+      // console.log({ employeeFormatData });
+
+      setEmployees(employeeFormatData);
+    };
+
+    const fetchDepartments = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/get-departments`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const allDepartments = await response.json();
+      // console.log({ allDepartments });
+      const allDeparmentsFormat = allDepartments.data.map((department) => {
+        return {
+          VALUE: department.departament_id,
+          TEXT: department.departament_label,
+        };
+      });
+      setAllDepartments([...allDeparmentsFormat]);
+    };
+
+    const rawMaterial = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/get-raw-material-floor`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const allMaterial = await response.json();
+      // console.log({ allMaterial });
+      const allMaterialFormat = allMaterial.data.map((material) => {
+        return {
+          VALUE: material.id_materias_prima,
+          TEXT: material.materia_prima_label,
+        };
+      });
+      setRawMaterial([...allMaterialFormat]);
+    };
+
+    fetchAllEmployees();
+    fetchDepartments();
+    rawMaterial();
+  }, []);
 
   const handleSubmit = (values) => {
     return new Promise(async (resolve, reject) => {
@@ -37,7 +113,7 @@ function ExtraccionPisos() {
           }
         );
         response = await response.json();
-        console.log(response);
+        // console.log(response);
         if (!response.transferCompleted) return reject(response);
         resolve(response);
       } catch (error) {
@@ -53,6 +129,7 @@ function ExtraccionPisos() {
         initialValues={{
           LoteMateriaPrima: "",
           empleadoVenta: "",
+          departamento: "",
           monotMinimo: "",
           notas: "",
         }}
@@ -69,12 +146,17 @@ function ExtraccionPisos() {
           <Select
             name="LoteMateriaPrima"
             label="Materia prima"
-            opions={authCtx.bankAccounts}
+            opions={rawMaterial}
+          />
+          <Select
+            name="departamento"
+            label="Ubicacion"
+            opions={allDepartments}
           />
           <Select
             name="empleadoVenta"
             label="Empleado encargado"
-            opions={authCtx.bankAccounts}
+            opions={employees}
           />
           <InputString label="Precio minimo" name="monotMinimo" type="number" />
           <Textarea label="Notas" name="notas" />

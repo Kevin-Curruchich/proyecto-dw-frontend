@@ -54,12 +54,12 @@ export default function Header(typeNav) {
         >
           Login
         </button>
-        <button
+        {/* <button
           onClick={() => navigate("/signup")}
           className="button button--large solid"
         >
           SignUp
-        </button>
+        </button> */}
       </div>
     );
   }
@@ -76,9 +76,9 @@ export default function Header(typeNav) {
           {`${authCtx.currentUser.first_name} ${authCtx.currentUser.last_name}`.toUpperCase()}{" "}
           <BiCaretDown />
           <ul className="dropdown-content">
-            {/* <li className="dropdown-content-item">
-              <Link to="/addbank">Add bank account</Link>
-            </li> */}
+            <li className="dropdown-content-item">
+              <Link to="/signup">Agregar usuario</Link>
+            </li>
             <li className="dropdown-content-item">
               <button
                 onClick={logoutHandle}

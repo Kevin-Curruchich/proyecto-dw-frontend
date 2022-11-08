@@ -10,55 +10,42 @@ import "./Dashboard.css";
 export default function Dashboard() {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
-  const [cookies] = useCookies(["auth_token"]);
-  const [recordHistoryIncomes, setRecordHistoryIncomes] = useState([]);
-  const [recordHistoryExpenses, setRecordHistoryExpenses] = useState([]);
+  const [primarySales, setPrimarySales] = useState([]);
+  const [budgets, setBudgets] = useState([]);
+  const [transportalRental, setTransportalRental] = useState([]);
 
-  // useEffect(() => {
-  //   if (Object.entries(authCtx.currentUser).length === 0) {
-  //     navigate("/", { replace: true });
-  //   }
+  useEffect(() => {
+    // if (Object.entries(authCtx.currentUser).length === 0) {
+    //   navigate("/", { replace: true });
+    // }
 
-  //   //traer todos los records del usuario
-  //   const fetchRecordHistory = async () => {
-  //     const responseIncomes = await fetch(
-  //       `${process.env.REACT_APP_BACKEND_URL}/getrecordhistory/${cookies.auth_token}/1`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${cookies.auth_token}`,
-  //         },
-  //       }
-  //     );
+    //traer todos los records del usuario
+    const fetchAllBudgets = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/get-budget`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  //     const { data: dataIncomes } = await responseIncomes.json();
-  //     const lastRecordsIncomes = dataIncomes
-  //       .sort((a, b) => new Date(b.RECORD_DATE) - new Date(a.RECORD_DATE))
-  //       .slice(0, 2);
-  //     setRecordHistoryIncomes(lastRecordsIncomes);
+      const budgets = await response.json();
+      console.log({ budgets });
+      const formatBudgetOption = budgets.data.map((budget) => {
+        return {
+          ...budget,
+          moneda: "GTQ",
+        };
+      });
+      console.log({ formatBudgetOption });
 
-  //     const responseExpenses = await fetch(
-  //       `${process.env.REACT_APP_BACKEND_URL}/getrecordhistory/${cookies.auth_token}/2`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${cookies.auth_token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const { data: dataExpenses } = await responseExpenses.json();
-  //     const lastRecordsExpenses = dataExpenses
-  //       .sort((a, b) => new Date(b.RECORD_DATE) - new Date(a.RECORD_DATE))
-  //       .slice(0, 2);
-
-  //     setRecordHistoryExpenses(lastRecordsExpenses);
-  //   };
-  //   fetchRecordHistory();
-  //   authCtx.refreshBankAccounts();
-  // }, []);
+      setBudgets(formatBudgetOption);
+    };
+    fetchAllBudgets();
+    // authCtx.refreshBankAccounts();
+  }, []);
 
   return (
     <>
@@ -72,23 +59,16 @@ export default function Dashboard() {
               </p>
               <div className="dashboard__accounts">
                 {/* {authCtx.bankAccounts.map((bankAccount) => ( */}
-                {[
-                  {
-                    giroNegocioId: "TP01",
-                    moneda: "GTQ",
-                    presupuesto: 3222,
-                    giroNegocioNombre: "Mineria",
-                  },
-                ].map((bankAccount) => (
-                  <div className="accounts__card" key={bankAccount.giroNegocio}>
+                {budgets.map((aBudget) => (
+                  <div className="accounts__card" key={aBudget.id_prespuesto}>
                     <p className="accounts__card--mount">
                       {new Intl.NumberFormat("en-US", {
                         style: "currency",
-                        currency: bankAccount.moneda,
-                      }).format(bankAccount.presupuesto)}
+                        currency: aBudget.moneda,
+                      }).format(aBudget.presupuesto)}
                     </p>
                     <div className="accounts__card--bank">
-                      <p>{bankAccount.giroNegocioNombre}</p>
+                      <p>{aBudget.C_descrpcion}</p>
                     </div>
                   </div>
                 ))}
@@ -113,7 +93,7 @@ export default function Dashboard() {
                 </Link>
                 <BiChevronRight />
               </div>
-              {recordHistoryIncomes.map((record) => (
+              {primarySales.map((record) => (
                 <RecordCard record={record} key={record.RECORD_HISTORY} />
               ))}
             </div>
@@ -124,7 +104,7 @@ export default function Dashboard() {
                 </Link>
                 <BiChevronRight />
               </div>
-              {recordHistoryExpenses.map((record) => (
+              {transportalRental.map((record) => (
                 <RecordCard record={record} key={record.RECORD_HISTORY} />
               ))}
             </div>

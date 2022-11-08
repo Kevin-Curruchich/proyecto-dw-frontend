@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import AuthContext from "../../context/auth-context";
 import Select from "../../Components/Select/Select";
@@ -20,6 +20,35 @@ function VentaBlocks() {
   const authCtx = useContext(AuthContext);
   const [cookies] = useCookies(["auth_token"]);
   const [error, setError] = useState("");
+
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    const fetchAllEmployees = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/get-employees`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const allEmployees = await response.json();
+      console.log({ allEmployees });
+      const employeeFormatData = allEmployees.data.map((employee) => {
+        return {
+          VALUE: employee.id_personal,
+          TEXT: `${employee.P_nombre} ${employee.P_apellido}`,
+        };
+      });
+      console.log({ employeeFormatData });
+
+      setEmployees(employeeFormatData);
+    };
+
+    fetchAllEmployees();
+  }, []);
 
   const handleSubmit = (values) => {
     return new Promise(async (resolve, reject) => {
@@ -74,7 +103,7 @@ function VentaBlocks() {
           <Select
             name="empleadoVenta"
             label="Empleado encargado"
-            opions={authCtx.bankAccounts}
+            opions={employees}
           />
           <InputString label="Precio minimo" name="monotMinimo" type="number" />
           <Textarea label="Notas" name="notas" />
