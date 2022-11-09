@@ -1,6 +1,5 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import AuthContext from "../../context/auth-context";
 import Select from "../../Components/Select/Select";
 import InputString from "../../Components/Input/InputString";
 import FormContent from "../../Components/Form/FormContent";
@@ -8,9 +7,7 @@ import Textarea from "../../Components/Textarea/Textarea";
 import * as Yup from "yup";
 
 const recordSchema = Yup.object().shape({
-  LoteMateriaPrima: Yup.string().required(
-    "Seleccione un lote de materia prima"
-  ),
+  materiaPrima: Yup.string().required("Seleccione un lote de materia prima"),
   departamento: Yup.string().required("Seleccione ubicacion"),
   empleadoVenta: Yup.string().required("Seleccione empleado"),
   monotMinimo: Yup.number().required("Monto minimo al lote requerido"),
@@ -18,7 +15,6 @@ const recordSchema = Yup.object().shape({
 });
 
 function ExtraccionBlocks() {
-  const authCtx = useContext(AuthContext);
   const [cookies] = useCookies(["auth_token"]);
   const [error, setError] = useState("");
   const [rawMaterial, setRawMaterial] = useState([]);
@@ -100,20 +96,17 @@ function ExtraccionBlocks() {
     return new Promise(async (resolve, reject) => {
       try {
         let response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/transfermoney`,
+          `${process.env.REACT_APP_BACKEND_URL}/post-extraction`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${cookies.auth_token}`,
             },
             credentials: "include",
             body: JSON.stringify(values),
           }
         );
         response = await response.json();
-        console.log(response);
-        if (!response.transferCompleted) return reject(response);
         resolve(response);
       } catch (error) {
         reject(error);
@@ -126,7 +119,7 @@ function ExtraccionBlocks() {
       <FormContent
         title="Materia Prima Blocks"
         initialValues={{
-          LoteMateriaPrima: "",
+          materiaPrima: "",
           empleadoVenta: "",
           departamento: "",
           monotMinimo: "",
@@ -135,7 +128,13 @@ function ExtraccionBlocks() {
         recordSchema={recordSchema}
         cbSubmit={(values, actions) => {
           handleSubmit(values)
-            .then((response) => actions.resetForm())
+            .then(() => {
+              setError("Extraccion registrado");
+              setTimeout(() => {
+                setError("");
+              }, 5000);
+              actions.resetForm();
+            })
             .catch((error) => {
               setError(error.message);
             });
@@ -143,7 +142,7 @@ function ExtraccionBlocks() {
       >
         <div className="form__inputs">
           <Select
-            name="LoteMateriaPrima"
+            name="materiaPrima"
             label="Materia prima"
             opions={rawMaterial}
           />

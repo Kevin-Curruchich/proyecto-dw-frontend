@@ -1,32 +1,20 @@
-import { BiDetail, BiCreditCard, BiCalendarAlt } from "react-icons/bi";
+import { BiDetail, BiCar } from "react-icons/bi";
 import "./RecordCard.css";
 
 function RecordCard({ record }) {
   return (
     <div className="record">
-      <p
-        className={`record--amount ${
-          record.RECORD_TYPE == 1 ? "income" : "expense"
-        }`}
-      >
+      <p className={`record--amount ${"income"}`}>
         {new Intl.NumberFormat("en-US", {
           style: "currency",
-          currency: record.CURRENCIE_SYMBOL,
-        }).format(record.AMOUNT)}
+          currency: record.moneda,
+        }).format(record.precio)}
       </p>
       <p className="record--description">
-        <BiDetail /> {record.DESCRIPTION}
+        <BiDetail /> {record.descripcion}
       </p>
       <p className="record--bank">
-        <BiCreditCard /> {record.BANK_ACCOUNT}
-      </p>
-      <p>
-        <BiCalendarAlt />
-        {/* {record.RECORD_DATE} */}
-        {`
-        ${new Intl.DateTimeFormat("es-US").format(
-          new Date(record.RECORD_DATE)
-        )}`}
+        <BiCar /> Camion: {record.truck_unique_code}
       </p>
     </div>
   );

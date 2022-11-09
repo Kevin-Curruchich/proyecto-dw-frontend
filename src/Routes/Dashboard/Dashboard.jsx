@@ -44,6 +44,30 @@ export default function Dashboard() {
       setBudgets(formatBudgetOption);
     };
     fetchAllBudgets();
+
+    const fetchAllTransportRental = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/get-all-transport-rental`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const allRental = await response.json();
+      const formatAllRental = allRental.data.map((rental) => {
+        return {
+          ...rental,
+          moneda: "GTQ",
+        };
+      });
+      console.log({ formatAllRental });
+
+      setTransportalRental(formatAllRental);
+    };
+    fetchAllTransportRental();
     // authCtx.refreshBankAccounts();
   }, []);
 
