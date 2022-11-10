@@ -138,7 +138,7 @@ function VentaPisos() {
         {error && <p className="form__error">{error}</p>}
         <div className="form__buttons--one">
           <button type="submit" className="button button--xlarge solid">
-            Transfer
+            Registrar
           </button>
         </div>
       </FormContent>

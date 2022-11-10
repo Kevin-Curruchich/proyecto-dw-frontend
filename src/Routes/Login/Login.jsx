@@ -52,7 +52,7 @@ export default function Login() {
             <button type="submit" className="button button--large solid">
               Login
             </button>
-            <button className="button button--large border">Google</button>
+            {/* <button className="button button--large border">Google</button> */}
           </div>
           <div className="form__links">
             <p>Dont have account</p>

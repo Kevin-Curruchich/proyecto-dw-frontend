@@ -84,7 +84,7 @@ export default function Header(typeNav) {
                 onClick={logoutHandle}
                 className="button button--large border"
               >
-                Logout
+                Salir
               </button>
             </li>
           </ul>

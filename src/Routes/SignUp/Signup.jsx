@@ -32,7 +32,7 @@ export default function Signup() {
       <Header />
       <main className="main--onboard">
         <FormContent
-          title="Sign Up"
+          title="Registar usuario"
           initialValues={{
             first_name: "",
             last_name: "",
@@ -54,38 +54,38 @@ export default function Signup() {
           <div className="form__inputs">
             <div className="form__inputs--column">
               <InputString
-                label="Name"
+                label="Nombre"
                 largeInput="medium"
                 name="first_name"
                 type="text"
               />
               <InputString
-                label="Last Name"
+                label="Apellido"
                 largeInput="medium"
                 name="last_name"
                 type="text"
               />
             </div>
             <InputString label="Email" name="email" type="email" />
-            <InputString label="Password" name="password" type="password" />
+            <InputString label="Contraseña" name="password" type="password" />
             <InputString
-              label="Confirm Password"
+              label="Confirmar contraseña"
               name="confirmPassword"
               type="password"
             />
           </div>
           <div className="form__buttons">
             <button type="submit" className="button button--large solid">
-              Sign UP
+              Registrar
             </button>
-            <button type="submit" className="button button--large border">
+            {/* <button type="submit" className="button button--large border">
               Google
-            </button>
+            </button> */}
           </div>
-          <div className="form__links">
+          {/* <div className="form__links">
             <p>Already have account?</p>
             <Link to="/login">Login</Link>
-          </div>
+          </div> */}
         </FormContent>
       </main>
     </>
