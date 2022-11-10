@@ -1,6 +1,5 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import AuthContext from "../../context/auth-context";
 import Select from "../../Components/Select/Select";
 import InputString from "../../Components/Input/InputString";
 import FormContent from "../../Components/Form/FormContent";
@@ -8,7 +7,7 @@ import Textarea from "../../Components/Textarea/Textarea";
 import * as Yup from "yup";
 
 const recordSchema = Yup.object().shape({
-  LoteMateriaPrima: Yup.string().required(
+  extraccionMateriaPrima: Yup.string().required(
     "Seleccione un lote de materia prima"
   ),
   empleadoVenta: Yup.string().required("Seleccione empleado"),
@@ -17,11 +16,11 @@ const recordSchema = Yup.object().shape({
 });
 
 function VentaPisos() {
-  const authCtx = useContext(AuthContext);
   const [cookies] = useCookies(["auth_token"]);
   const [error, setError] = useState("");
 
   const [employees, setEmployees] = useState([]);
+  const [allExtractions, setAllExtractions] = useState([]);
 
   useEffect(() => {
     const fetchAllEmployees = async () => {
@@ -48,26 +47,48 @@ function VentaPisos() {
     };
 
     fetchAllEmployees();
+
+    const fetchALlExtraction = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/get-extraction-material-piso`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const allExtractions = await response.json();
+      console.log({ allExtractions });
+      const formatAllExtraction = allExtractions.data.map((extraction) => {
+        return {
+          VALUE: extraction.id_extraccion,
+          TEXT: `${extraction.materia_prima_label}:${extraction.id_extraccion} Q.${extraction.precio}`,
+        };
+      });
+      console.log({ formatAllExtraction });
+
+      setAllExtractions(formatAllExtraction);
+    };
+
+    fetchALlExtraction();
   }, []);
 
   const handleSubmit = (values) => {
     return new Promise(async (resolve, reject) => {
       try {
         let response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/transfermoney`,
+          `${process.env.REACT_APP_BACKEND_URL}/post-sales`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${cookies.auth_token}`,
             },
             credentials: "include",
             body: JSON.stringify(values),
           }
         );
         response = await response.json();
-        console.log(response);
-        if (!response.transferCompleted) return reject(response);
         resolve(response);
       } catch (error) {
         reject(error);
@@ -80,7 +101,7 @@ function VentaPisos() {
       <FormContent
         title="Venta de pisos"
         initialValues={{
-          LoteMateriaPrima: "",
+          extraccionMateriaPrima: "",
           empleadoVenta: "",
           monotMinimo: "",
           notas: "",
@@ -88,7 +109,13 @@ function VentaPisos() {
         recordSchema={recordSchema}
         cbSubmit={(values, actions) => {
           handleSubmit(values)
-            .then((response) => actions.resetForm())
+            .then((response) => {
+              setError("Venta registrada");
+              setTimeout(() => {
+                setError("");
+              }, 5000);
+              actions.resetForm();
+            })
             .catch((error) => {
               setError(error.message);
             });
@@ -96,9 +123,9 @@ function VentaPisos() {
       >
         <div className="form__inputs">
           <Select
-            name="LoteMateriaPrima"
+            name="extraccionMateriaPrima"
             label="Materia prima"
-            opions={authCtx.bankAccounts}
+            opions={allExtractions}
           />
           <Select
             name="empleadoVenta"

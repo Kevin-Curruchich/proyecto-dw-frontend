@@ -5,12 +5,13 @@ import AuthContext from "../../context/auth-context";
 import { BiChevronRight, BiMoney } from "react-icons/bi";
 import Header from "../../Components/Header/Header";
 import RecordCard from "../../Components/RecordCard/RecordCard";
+import RecordCardSale from "../../Components/RecordCardSale/RecordCardSale";
 import "./Dashboard.css";
 
 export default function Dashboard() {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
-  const [primarySales, setPrimarySales] = useState([]);
+  const [allSales, setAllSales] = useState([]);
   const [budgets, setBudgets] = useState([]);
   const [transportalRental, setTransportalRental] = useState([]);
 
@@ -68,6 +69,30 @@ export default function Dashboard() {
       setTransportalRental(formatAllRental);
     };
     fetchAllTransportRental();
+
+    const fetchAllSales = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/get-all-sales`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const allSales = await response.json();
+      const formatAllSales = allSales.data.map((sale) => {
+        return {
+          ...sale,
+          moneda: "GTQ",
+        };
+      });
+      console.log({ formatAllSales });
+
+      setAllSales(formatAllSales);
+    };
+    fetchAllSales();
     // authCtx.refreshBankAccounts();
   }, []);
 
@@ -117,8 +142,8 @@ export default function Dashboard() {
                 </Link>
                 <BiChevronRight />
               </div>
-              {primarySales.map((record) => (
-                <RecordCard record={record} key={record.RECORD_HISTORY} />
+              {allSales.map((sale) => (
+                <RecordCardSale record={sale} key={sale.id_sale} />
               ))}
             </div>
             <div className="dashboard__resume--expenses dashboard__resume__record">
